@@ -8,6 +8,8 @@ import {useState} from "react";
 import {readFile} from "@/lib/fileUtils";
 import {parseGPX, extractFileParsedData} from "@/lib/gpxUtils";
 import {GpxSummaryData} from "@/lib/types/gpx";
+import {Button} from "@/app/components/ui/button";
+import {generateUniqueKey} from "@/lib/utils";
 
 export default function Home() {
     const [filesGpxParsed, setFilesGpxParsed]= useState<GpxParser[]>([])
@@ -46,33 +48,22 @@ export default function Home() {
         }
     }
 
-    function generateUniqueKey(): number {
-        return Date.now() + Math.floor(Math.random() * 1000)
+    function handleButtonPlotElevationClick(){
+        throw new Error("Plot Elevation Not implemented")
     }
 
     return (
         <main>
             <MainTitle/>
-            <FileSelector onFileSelect={handleSelectedFiles} value="Upload .gpx Files"/>
-            <div className="flex flex-row  justify-center w-auto flex-wrap">
+            <FileSelector onFileSelect={handleSelectedFiles} value="Upload .gpx Files" title="Click to upload one or more .gpx files"/>
+            <ol className="flex flex-row  justify-center w-auto flex-wrap">
                 {fileCardsData.map(card  => (
                     <FileCard key={card.key.toString()} value={card}/>
                 ))}
+            </ol>
+            <div className="flex justify-center m-4">
+                <Button onClick={handleButtonPlotElevationClick} variant="secondary" size="lg" title="Click to plot the tracks elevation on a chart">Plot elevation</Button>
             </div>
-
-            <section className="section-2">
-
-                <section className="section-6">
-                    <ol id="fileList" className="fileList"></ol>
-                </section>
-
-                <input className="btn hidden_on_start" type="button" id="btnPlotEle" value="Plot Elevation"
-                       title="Click here to plot chart: (x,y) ->(distance, altitude)"/>
-            </section>
-
-            <section className="section-3">
-                <p id="p1"></p>
-            </section>
 
             <section className="section-4 hidden_on_start" id="section-4">
                 <h3>Chart customization options:</h3>

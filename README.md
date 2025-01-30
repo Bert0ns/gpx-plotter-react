@@ -12,7 +12,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 ## TODO
 
 1) Transition to react
-2) 
+2) - https://blog.logrocket.com/using-chart-js-react/
    - Improve chart visualization
    - find bugs
    - Add the possibility to edit fonts on the chart
