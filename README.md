@@ -17,7 +17,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
    - find bugs
    - Add the possibility to edit fonts on the chart
    - Improve chart performance
-   - improve file read visual by inserting a card for each file, containing relevant information
+   - improve file read visual by inserting a card for each file, containing relevant information 
    - Add a way to trim data at the ends of the chart
 
 ## Learn More

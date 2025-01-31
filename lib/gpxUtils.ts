@@ -5,7 +5,7 @@ import {GpxSummaryData} from "@/lib/types/gpx";
  * parses the text string given using the GPX format
  * @param fileGPX {string}
  */
- export function parseGPX(fileGPX: string) : GpxParser | null {
+export function parseGPX(fileGPX: string) : GpxParser | null {
     if (fileGPX === null) {
         console.warn('FileGPX is undefined.');
         return null;
@@ -80,4 +80,57 @@ export function extractFileParsedData(fileGpxParsed : GpxParser, key : number) :
     };
 }
 
+export function getElevationTrackPoints(gpx : GpxParser): number[] {
+    const points = gpx.tracks[0].points;
+    return points.map(p => p.ele);
+}
 
+export function getElevationRoutePoints(gpx : GpxParser): number[]  {
+    const points = gpx.routes[0].points;
+    return points.map(p => p.ele);
+}
+
+export function getDistanceTrackPoints(gpx: GpxParser): number[] {
+    // @ts-expect-error library type error
+    return gpx.tracks[0].distance.cumul;
+}
+
+export function getDistanceRoutePoints(gpx: GpxParser): number[] {
+    // @ts-expect-error library type error
+    return gpx.routes[0].distance.cumul;
+}
+
+export function getDataPointsAxis(filesGpxParsed: GpxParser[]) {
+    let yAxisPoints : number[] = [];
+    let xAxisPoints : number[] = [];
+    for (let i = 0; i < filesGpxParsed.length; i++) {
+        if (filesGpxParsed[i].tracks.length > 0) {
+            //plot the tracks
+            yAxisPoints = yAxisPoints.concat(getElevationTrackPoints(filesGpxParsed[i]));
+
+            const dp = getDistanceTrackPoints(filesGpxParsed[i]).map((p: number) => {
+                if (xAxisPoints.length < 1) {
+                    return p;
+                }
+                return p + xAxisPoints[xAxisPoints.length - 1]
+            });
+            xAxisPoints = xAxisPoints.concat(dp);
+        } else if (filesGpxParsed[i].routes.length > 0) {
+            //plot the routes
+            yAxisPoints = yAxisPoints.concat(getElevationRoutePoints(filesGpxParsed[i]));
+
+            const dp = getDistanceRoutePoints(filesGpxParsed[i]).map((p: number) => {
+                if (xAxisPoints.length < 1) {
+                    return p;
+                }
+                return p + xAxisPoints[xAxisPoints.length - 1]
+            });
+            xAxisPoints = xAxisPoints.concat(dp);
+        } else {
+            console.error(`file gpx parsed number ${i} has no tracks and no routes`);
+        }
+    }
+
+    xAxisPoints = xAxisPoints.map(p => Number(p.toFixed(1)));
+    return {elevPoints: yAxisPoints, distPoints: xAxisPoints};
+}
