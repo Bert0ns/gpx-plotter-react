@@ -51,11 +51,11 @@ const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(
         normalized: true, //parsing: false,
         scales: {
             x: {
-                display: displayAxis ? displayAxis : true, ticks: {
+                display: displayAxis !== undefined ? displayAxis : true, ticks: {
                     maxTicksLimit: 10,
                 },
             }, y: {
-                display: displayAxis ? displayAxis : true, ticks: {
+                display: displayAxis !== undefined ? displayAxis : true, ticks: {
                     maxTicksLimit: 12,
                 },
             },
@@ -64,7 +64,7 @@ const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(
         },
         plugins: {
             legend: {
-                display: displayLegend ? displayLegend : true,
+                display: displayLegend !== undefined ? displayLegend : true,
             },
             title: {
                 display: !!chartTitle,

@@ -16,6 +16,23 @@ import CheckBox from "@/app/components/atoms/CheckBox";
 import {TypedChartComponent} from "@/node_modules/react-chartjs-2/dist/types";
 
 export default function Home() {
+    const chartRef = useRef<TypedChartComponent<"line">>(null)
+    const [elevationPoints, setElevationPoints] = useState<number[]>([100, 150, 400, 50, 50]);
+    const [distancePoints, setDistancePoints] = useState<number[]>([55, 1000, 3000, 3333, 4444]);
+    const [displayLegend, setDisplayLegend] = useState<boolean>(true);
+    const [chartLineColor, setChartLineColor] = useState<string>("#000000")
+    const [chartLineBorderWidth, setChartLineBorderWidth] = useState<number>(4);
+    const [chartTitleFontSize, setChartTitleFontSize] = useState<number>(20);
+    const [colorChartTitle, setColorChartTitle] = useState<string>("#000000");
+    const [chartTitleText, setChartTitleText] = useState<string>("My chart");
+    const [chartBackgroundColor, setChartBackgroundColor] = useState<string>("#ffffff")
+    const [chartAxisVisual, setChartAxisVisual] = useState<boolean>(true);
+    const [chartPointsVisual, setChartPointsVisual] = useState<boolean>(false);
+    const [chartSmoothVisual, setChartSmoothVisual] = useState<boolean>(true);
+
+    const [isChartVisible, setIsChartVisible] = useState<boolean>(false);
+    const [isButtonPlotElevationVisible, setIsButtonPlotElevationVisible] = useState<boolean>(false);
+
     const [filesGpxParsed, setFilesGpxParsed]= useState<GpxParser[]>([]);
     const addFileGpxParsed = (file: GpxParser): void => {
         setFilesGpxParsed((prev) => [...prev, file]);
@@ -25,23 +42,6 @@ export default function Home() {
     const addFileCardData = (data: GpxSummaryData): void => {
         setFileCardsData((prev) => [...prev, data]);
     }
-
-    const [elevationPoints, setElevationPoints] = useState<number[]>([100, 150, 400, 50, 50]);
-    const [distancePoints, setDistancePoints] = useState<number[]>([55, 1000, 3000, 3333, 4444]);
-    const [displayLegend, setDisplayLegend] = useState<boolean>(true);
-    const [chartLineColor, setChartLineColor] = useState<string>("#000000")
-    const [chartLineBorderWidth, setChartLineBorderWidth] = useState<number>(4);
-    const [chartTitleFontSize, setChartTitleFontSize] = useState<number>(20);
-    const [colorChartTitle, setColorChartTitle] = useState<string>("#000000");
-    const [chartBackgroundColor, setChartBackgroundColor] = useState<string>("#ffffff")
-    const [chartAxisVisual, setChartAxisVisual] = useState<boolean>(true);
-    const [chartPointsVisual, setChartPointsVisual] = useState<boolean>(false);
-    const [chartSmoothVisual, setChartSmoothVisual] = useState<boolean>(true);
-
-    const [isChartVisible, setIsChartVisible] = useState<boolean>(false);
-    const [isButtonPlotElevationVisible, setIsButtonPlotElevationVisible] = useState<boolean>(false);
-
-    const chartRef = useRef<TypedChartComponent<"line">>(null)
 
     function downloadChartImage(chartRef : RefObject<TypedChartComponent<"line"> | null>) : void
     {
@@ -89,7 +89,6 @@ export default function Home() {
         const {elevPoints, distPoints} = getDataPointsAxis(filesGpxParsed);
         setElevationPoints(elevPoints);
         setDistancePoints(distPoints);
-        console.log({elevPoints, distPoints});
         setIsChartVisible(true);
     }
 
@@ -111,7 +110,7 @@ export default function Home() {
                            className="p-1 w-full h-[80vh] shadow-2xl rounded-lg border-2 border-gray-300"
                            chartXDataLabels={distancePoints}
                            chartYData={elevationPoints}
-                           chartTitle={"Test font"}
+                           chartTitle={chartTitleText}
                            displayLegend={displayLegend}
                            chartLineColor={chartLineColor}
                            chartLineBorderWidth={chartLineBorderWidth}
@@ -126,36 +125,38 @@ export default function Home() {
                 />
                 <div className="mt-4 flex flex-col items-center shadow-2xl rounded-lg border-2 border-gray-300">
                     <h3 className="text-3xl font-bold text-gray-800">Chart customization options:</h3>
-                    <div className="flex flex-row flex-wrap">
-                        <CheckBox onChange={setDisplayLegend} checked={displayLegend} label={"Display Legend"} title="Show or hide the chart legend" className={"bg-gradient-to-br gradient from-orange-600 to-orange-300"}/>
-                        <CheckBox onChange={setChartAxisVisual} checked={chartAxisVisual} label={"Show Axis"} title="Show or hide the chart axis" className={"bg-gradient-to-br gradient from-orange-600 to-orange-300"}/>
-                        <CheckBox onChange={setChartPointsVisual} checked={chartPointsVisual} label={"Show Points"} title="Show or hide the points on the chart" className={"bg-gradient-to-br gradient from-orange-600 to-orange-300"}/>
-                        <CheckBox onChange={setChartSmoothVisual} checked={chartSmoothVisual} label={"Smooth Chart"} title="Make the line chart smoother" className={"bg-gradient-to-br gradient from-orange-600 to-orange-300"}/>
+                    <div className="flex-wrap flex flex-row">
+                        <CheckBox onChange={setDisplayLegend} checked={displayLegend} label={"Display Legend"} title="Show or hide the chart legend" className={"max-h-10 bg-gradient-to-br gradient from-gray-400 to-gray-50"}/>
+                        <CheckBox onChange={setChartAxisVisual} checked={chartAxisVisual} label={"Show Axis"} title="Show or hide the chart axis" className={"max-h-10 bg-gradient-to-br gradient from-gray-400 to-gray-50"}/>
+                        <CheckBox onChange={setChartPointsVisual} checked={chartPointsVisual} label={"Show Points"} title="Show or hide the points on the chart" className={"max-h-10 bg-gradient-to-br gradient from-gray-400 to-gray-50"}/>
+                        <CheckBox onChange={setChartSmoothVisual} checked={chartSmoothVisual} label={"Smooth Chart"} title="Make the line chart smoother" className={"max-h-10 bg-gradient-to-br gradient from-gray-400 to-gray-50"}/>
 
-                    </div>
+                        <div className="m-2 flex flex-row space-x-2 shadow-lg rounded-lg p-2 bg-gradient-to-br gradient from-gray-400 to-gray-50">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-medium text-gray-800 flex items-center space-x-2">
+                                    <span>Line color</span>
+                                    <input type="color" onChange={(color) => setChartLineColor(color.target.value)} defaultValue={chartLineColor} title="Change the color of the line on the chart" className="w-12 h-8 overflow-hidden cursor-pointer"/>
+                                </label>
+                            </div>
+                            <div className="flex items-center justify-between space-x-2">
+                                <label htmlFor="widthLineChart" className="text-sm font-medium text-gray-800">Width</label>
+                                <div className="flex items-center space-x-2">
+                                    <input type="number" onChange={(width) => setChartLineBorderWidth(parseInt(width.target.value))} defaultValue={chartLineBorderWidth} id="widthLineChart" min="0" max="35" title="Change the width of the line on the chart" className="w-16 px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"/>
+                                    <span className="text-sm text-gray-500">px</span>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div className="customization_options" id="customization_options_menu">
-                        <label className="btn_option">Line color
-                            <input type="color" id="colorPickerLineChart" value="#000000"
-                                   title="Change the color of the line on the chart"/>
-                            <label>Width
-                                <input type="number" id="widthLineChart" value="2" min="0" max="35"
-                                       title="Change the width of the line on the chart"/>
-                            </label>
+                        <label className="m-2 shadow-lg rounded-lg p-2 bg-gradient-to-br gradient from-gray-400 to-gray-50 flex items-center justify-between space-x-2">
+                            <span>Background color</span>
+                            <input type="color" onChange={(color) => setChartBackgroundColor(color.target.value)} defaultValue={chartBackgroundColor} title="Change the chart background color"/>
                         </label>
 
-                        <label className="btn_option">Background color
-                            <input type="color" id="colorPickerBackgroundChart" value="#ffffff"
-                                   title="Change the chart background color"/>
-                        </label>
-
-                        <label className="btn_option">Show title
-                            <input type="text" id="textBoxTitleChart" value="My track elevation profile"
-                                   title="Change the chart title"/>
-                            <input type="color" id="colorPickerTitleChart" value="#000000"
-                                   title="Change chart title color"/>
-                            <input type="number" id="fontSizeTitleChart" value="20" min="4" max="70"
-                                   title="Change chart title font size"/>
+                        <label className="m-2 shadow-lg rounded-lg p-2 bg-gradient-to-br gradient from-gray-400 to-gray-50 flex items-center justify-between space-x-2">
+                            <span>Show title</span>
+                            <input type="text" onChange={(event) => setChartTitleText(event.target.value)} defaultValue={chartTitleText} title="Change the chart title"/>
+                            <input type="color" onChange={(e) => setColorChartTitle(e.target.value)} defaultValue={colorChartTitle} title="Change chart title color"/>
+                            <input type="number" onChange={(e) => setChartTitleFontSize(parseInt(e.target.value))} defaultValue={chartTitleFontSize} min="2" max="70" title="Change chart title font size"/>
                         </label>
                     </div>
                 </div>
