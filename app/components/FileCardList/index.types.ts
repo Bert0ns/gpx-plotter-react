@@ -4,4 +4,5 @@ import React from "react";
 export default interface FileCardListProps {
     cards: FileCardProps["value"][];
     setCards: React.Dispatch<React.SetStateAction<FileCardProps["value"][]>>;
+    onOrderChange?: (newOrder: FileCardProps["value"][]) => void;
 }

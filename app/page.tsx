@@ -91,11 +91,17 @@ export default function Home() {
         setIsChartVisible(true);
     }
 
+    function handleOrderChange(newOrder: GpxSummaryData[])  {
+        console.log("New card order:", newOrder);
+        // You can perform any additional actions here, such as updating a backend API
+        //newOrder[0].key
+    }
+
     return (
         <main>
             <MainTitle/>
             <FileSelector onFileSelect={handleSelectedFiles} value="Upload .gpx Files" title="Click to upload one or more .gpx files"/>
-            <FileCardList cards={fileCardsData} setCards={setFileCardsData} />
+            <FileCardList cards={fileCardsData} setCards={setFileCardsData} onOrderChange={handleOrderChange}/>
 
             <VisibleDiv className="flex justify-center m-4" isVisible={isButtonPlotElevationVisible}>
                 <Button onClick={handleButtonPlotElevationClick} variant="secondary" size="lg" title="Click to plot the tracks elevation on a chart">Plot elevation</Button>
