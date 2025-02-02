@@ -3,7 +3,6 @@
 import MainTitle from "@/app/components/atoms/MainTitle";
 import FileSelector from "@/app/components/atoms/FileSelector";
 import GpxParser from "gpxparser";
-import FileCard from "@/app/components/atoms/FileCard";
 import {RefObject, useRef, useState} from "react";
 import {readFile} from "@/lib/fileUtils";
 import {parseGPX, extractFileParsedData, getDataPointsAxis} from "@/lib/gpxUtils";
@@ -14,6 +13,7 @@ import LineChart from "@/app/components/atoms/LineChart";
 import VisibleDiv from "@/app/components/atoms/VisibleDiv";
 import CheckBox from "@/app/components/atoms/CheckBox";
 import {TypedChartComponent} from "@/node_modules/react-chartjs-2/dist/types";
+import FileCardList from "@/app/components/FileCardList";
 
 export default function Home() {
     const chartRef = useRef<TypedChartComponent<"line">>(null)
@@ -33,7 +33,7 @@ export default function Home() {
     const [isChartVisible, setIsChartVisible] = useState<boolean>(false);
     const [isButtonPlotElevationVisible, setIsButtonPlotElevationVisible] = useState<boolean>(false);
 
-    const [filesGpxParsed, setFilesGpxParsed]= useState<GpxParser[]>([]);
+    const [filesGpxParsed, setFilesGpxParsed] = useState<GpxParser[]>([]);
     const addFileGpxParsed = (file: GpxParser): void => {
         setFilesGpxParsed((prev) => [...prev, file]);
     }
@@ -43,10 +43,8 @@ export default function Home() {
         setFileCardsData((prev) => [...prev, data]);
     }
 
-    function downloadChartImage(chartRef : RefObject<TypedChartComponent<"line"> | null>) : void
-    {
-        if(chartRef.current)
-        {
+    function downloadChartImage(chartRef: RefObject<TypedChartComponent<"line"> | null>): void {
+        if (chartRef.current) {
             console.log({...chartRef.current})
             const link = document.createElement("a")
             link.download = "chart.png"
@@ -57,13 +55,13 @@ export default function Home() {
         }
     }
 
-    async function handleSelectedFiles(files : FileList | null) : Promise<void> {
+    async function handleSelectedFiles(files: FileList | null): Promise<void> {
         if (!files || files.length === 0) {
             return;
         }
 
         for (let i = 0; i < files.length; i++) {
-            try{
+            try {
                 const fileString = await readFile(files[i]);
                 if (!fileString) {
                     return;
@@ -76,16 +74,17 @@ export default function Home() {
                 addFileGpxParsed(fileParsed)
                 const fileData = extractFileParsedData(fileParsed, generateUniqueKey());
                 addFileCardData(fileData);
-            }
-            catch(err) {
+            } catch (err) {
                 console.error("Error processing file:", err);
             }
         }
         setIsButtonPlotElevationVisible(true);
     }
 
-    function handleButtonPlotElevationClick(){
-        if(!filesGpxParsed || filesGpxParsed.length === 0) { return; }
+    function handleButtonPlotElevationClick() {
+        if (!filesGpxParsed || filesGpxParsed.length === 0) {
+            return;
+        }
         const {elevPoints, distPoints} = getDataPointsAxis(filesGpxParsed);
         setElevationPoints(elevPoints);
         setDistancePoints(distPoints);
@@ -96,11 +95,8 @@ export default function Home() {
         <main>
             <MainTitle/>
             <FileSelector onFileSelect={handleSelectedFiles} value="Upload .gpx Files" title="Click to upload one or more .gpx files"/>
-            <ol className="flex flex-row  justify-center w-auto flex-wrap">
-                {fileCardsData.map(card  => (
-                    <FileCard key={card.key.toString()} value={card}/>
-                ))}
-            </ol>
+            <FileCardList cards={fileCardsData} setCards={setFileCardsData} />
+
             <VisibleDiv className="flex justify-center m-4" isVisible={isButtonPlotElevationVisible}>
                 <Button onClick={handleButtonPlotElevationClick} variant="secondary" size="lg" title="Click to plot the tracks elevation on a chart">Plot elevation</Button>
             </VisibleDiv>
