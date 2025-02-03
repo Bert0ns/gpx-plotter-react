@@ -15,6 +15,11 @@ import CheckBox from "@/app/components/atoms/CheckBox";
 import {TypedChartComponent} from "@/node_modules/react-chartjs-2/dist/types";
 import FileCardList from "@/app/components/FileCardList";
 
+export type FileGpx = {
+    key: number;
+    fileParsed: GpxParser;
+}
+
 export default function Home() {
     const chartRef = useRef<TypedChartComponent<"line">>(null)
     const [elevationPoints, setElevationPoints] = useState<number[]>([100, 150, 400, 50, 50]);
@@ -33,8 +38,8 @@ export default function Home() {
     const [isChartVisible, setIsChartVisible] = useState<boolean>(false);
     const [isButtonPlotElevationVisible, setIsButtonPlotElevationVisible] = useState<boolean>(false);
 
-    const [filesGpxParsed, setFilesGpxParsed] = useState<GpxParser[]>([]);
-    const addFileGpxParsed = (file: GpxParser): void => {
+    const [filesGpxParsed, setFilesGpxParsed] = useState<FileGpx[]>([]);
+    const addFileGpxParsed = (file: FileGpx): void => {
         setFilesGpxParsed((prev) => [...prev, file]);
     }
 
@@ -71,8 +76,12 @@ export default function Home() {
                     console.error("Could not parse file");
                     return;
                 }
-                addFileGpxParsed(fileParsed)
-                const fileData = extractFileParsedData(fileParsed, generateUniqueKey());
+                const fileGpx : FileGpx = {
+                    fileParsed: fileParsed,
+                    key: generateUniqueKey(),
+                };
+                addFileGpxParsed(fileGpx);
+                const fileData = extractFileParsedData(fileGpx.fileParsed, fileGpx.key);
                 addFileCardData(fileData);
             } catch (err) {
                 console.error("Error processing file:", err);
@@ -85,16 +94,33 @@ export default function Home() {
         if (!filesGpxParsed || filesGpxParsed.length === 0) {
             return;
         }
-        const {elevPoints, distPoints} = getDataPointsAxis(filesGpxParsed);
+        const {elevPoints, distPoints} = getDataPointsAxis(filesGpxParsed.map(file => file.fileParsed));
         setElevationPoints(elevPoints);
         setDistancePoints(distPoints);
         setIsChartVisible(true);
     }
 
     function handleOrderChange(newOrder: GpxSummaryData[])  {
-        console.log("New card order:", newOrder);
-        // You can perform any additional actions here, such as updating a backend API
-        //newOrder[0].key
+        if(newOrder.length !== filesGpxParsed.length) {
+            throw new Error("Arrays must have the same length.");
+        }
+
+        const orderMap = new Map();
+        const key = "key";
+        for (let i = 0; i < newOrder.length; i++) {
+            orderMap.set(newOrder[i][key], i);
+        }
+
+        const reorderedFilesGpxParsed = new Array(filesGpxParsed.length);
+        for (let i = 0; i < filesGpxParsed.length; i++) {
+            const index = orderMap.get(filesGpxParsed[i][key]);
+            if (index === undefined) {
+                throw new Error(`Key '${filesGpxParsed[i][key]}' not found in the first array.`);
+            }
+            reorderedFilesGpxParsed[index] = filesGpxParsed[i];
+        }
+        console.log({old_order: filesGpxParsed, new_order: reorderedFilesGpxParsed});
+        setFilesGpxParsed(reorderedFilesGpxParsed);
     }
 
     return (

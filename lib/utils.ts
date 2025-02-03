@@ -6,5 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function generateUniqueKey(): number {
-    return Date.now() + Math.floor(Math.random() * 1000)
+    return Date.now() % 10_000_000 + Math.floor(Math.random() * 1000)
 }

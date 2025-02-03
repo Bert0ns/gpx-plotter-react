@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import FileCard from "@/app/components/atoms/FileCard";
 import FileCardListProps from "@/app/components/FileCardList/index.types";
 
-const FileCardList: React.FC<FileCardListProps> = ({ cards, setCards }) => {
+const FileCardList: React.FC<FileCardListProps> = ({ cards, setCards, onOrderChange }) => {
     const onDragEnd = (result: DropResult) => {
         if (!result.destination) {
             return;
@@ -14,6 +14,9 @@ const FileCardList: React.FC<FileCardListProps> = ({ cards, setCards }) => {
         newCards.splice(result.destination.index, 0, reorderedItem);
 
         setCards(newCards);
+        if (onOrderChange) {
+            onOrderChange(newCards);
+        }
     };
 
     return (
