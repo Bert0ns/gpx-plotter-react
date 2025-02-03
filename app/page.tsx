@@ -90,19 +90,24 @@ export default function Home() {
         setIsButtonPlotElevationVisible(true);
     }
 
+    function updateDataInChart() {
+        const {elevPoints, distPoints} = getDataPointsAxis(filesGpxParsed.map(file => file.fileParsed));
+        setElevationPoints(elevPoints);
+        setDistancePoints(distPoints);
+    }
+
     function handleButtonPlotElevationClick() {
         if (!filesGpxParsed || filesGpxParsed.length === 0) {
             return;
         }
-        const {elevPoints, distPoints} = getDataPointsAxis(filesGpxParsed.map(file => file.fileParsed));
-        setElevationPoints(elevPoints);
-        setDistancePoints(distPoints);
+        updateDataInChart();
         setIsChartVisible(true);
     }
 
     function handleOrderChange(newOrder: GpxSummaryData[])  {
         if(newOrder.length !== filesGpxParsed.length) {
-            throw new Error("Arrays must have the same length.");
+            console.error("Arrays must have the same length.");
+            return;
         }
 
         const orderMap = new Map();
@@ -121,6 +126,9 @@ export default function Home() {
         }
         console.log({old_order: filesGpxParsed, new_order: reorderedFilesGpxParsed});
         setFilesGpxParsed(reorderedFilesGpxParsed);
+        if(isChartVisible) {
+            updateDataInChart()
+        }
     }
 
     return (
@@ -149,7 +157,7 @@ export default function Home() {
                            displayChartPoints={chartPointsVisual}
                            isSmoothVisual={chartSmoothVisual}
                            ref={chartRef}
-
+                           isResponsive={true}
                 />
                 <div className="mt-4 flex flex-col items-center shadow-2xl rounded-lg border-2 border-gray-300">
                     <h3 className="text-3xl font-bold text-gray-800">Chart customization options:</h3>
@@ -188,17 +196,17 @@ export default function Home() {
                         </label>
                     </div>
                 </div>
-                <Button onClick={() => downloadChartImage(chartRef)} title="Click to download the chart a .png image" className="mt-4">Download chart Image</Button>
+
+                <div id="dataLabelsContainer">
+                    <input type="button" id="btnAddDataLabel" value="Add Data Label" title="Create a new label to position on the chart"/>
+                </div>
+
+                <div className="flex justify-center">
+                    <Button onClick={() => downloadChartImage(chartRef)} title="Click to download the chart a .png image" className="mt-4">Download chart Image</Button>
+                </div>
             </VisibleDiv>
 
-            <section className="section-4 hidden_on_start" id="section-4">
-
-                <div className="dataLabelsContainer" id="dataLabelsContainer">
-                    <input className="btn_option" type="button" id="btnAddDataLabel" value="Add Data Label"
-                           title="Create a new label to position on the chart"/>
-                </div>
-            </section>
-
+            {/*
             <section className="section-7 hidden_on_start" id="section-7">
                 <div className="img-container">
                     <img className="shirt-img" src="images/reference-shirt.jpg" alt="shirt image" title="example"/>
@@ -208,6 +216,7 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+            */}
         </main>
     )
 }

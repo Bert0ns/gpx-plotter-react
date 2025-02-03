@@ -9,7 +9,7 @@ Chart.register(CategoryScale)
 const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(({chartXDataLabels, chartYData, chartTitle,
                                                                                       displayLegend, displayChartPoints, isSmoothVisual,
                                                                                      displayAxis, colorChartTitle, chartLineColor, chartLineBorderWidth
-                                                                                     , chartBackgroundColor, chartTitleFontSize,
+                                                                                     , chartBackgroundColor, chartTitleFontSize, isResponsive,
                                                                                      ...props}
                                                                                     , ref) => {
 
@@ -46,8 +46,8 @@ const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(
         }
     }
     const chartOptions = {
-        responsive: true,
-        maintainAspectRatio: true,
+        responsive: isResponsive !== undefined ? isResponsive : false,
+        maintainAspectRatio: false,
         normalized: true, //parsing: false,
         scales: {
             x: {

@@ -13,4 +13,5 @@ export default interface LineChartProps extends React.HTMLProps<HTMLDivElement> 
     chartTitleFontSize?: number
     displayChartPoints?: boolean
     isSmoothVisual?: boolean
+    isResponsive?: boolean
 }

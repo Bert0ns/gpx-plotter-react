@@ -25,7 +25,7 @@ const FileCardList: React.FC<FileCardListProps> = ({ cards, setCards, onOrderCha
                 {(provided) => (
                     <div {...provided.droppableProps} ref={provided.innerRef} className="flex flex-wrap">
                         {cards.map((card, index) => (
-                            <FileCard key={card.filename} value={card} index={index} />
+                            <FileCard key={card.key} value={card} index={index} />
                         ))}
                         {provided.placeholder}
                     </div>
