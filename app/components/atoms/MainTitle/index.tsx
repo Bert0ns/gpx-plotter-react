@@ -1,8 +1,7 @@
 import React, { FC } from "react";
-import MainTitleProps from "./index.types"
 import Image from "next/image";
 
-const MainTitle: FC<MainTitleProps> = ({ }) => {
+const MainTitle: FC = () => {
     return (
         <div className="relative w-full h-[300px] mb-4">
             <Image
