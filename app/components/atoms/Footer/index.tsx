@@ -1,7 +1,6 @@
 import React, { FC } from "react";
-import FooterProps from "./index.types"
 
-const Footer: FC<FooterProps> = ({ }) => {
+const Footer: FC = () => {
     const thisYear = new Date().getFullYear();
     return (
         <footer className="bg-white dark:bg-gray-800 shadow mt-12">
