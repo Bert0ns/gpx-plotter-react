@@ -1,4 +1,4 @@
-# GPX Viewer
+# GPX Plotter
 
 Plot your tracks and see the elevation profile! 
 Works with tracks and/or routes.
