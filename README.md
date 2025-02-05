@@ -25,4 +25,5 @@ Deployed here: [https://gpx-plotter-react.vercel.app/](https://gpx-plotter-react
 ## Learn More
 
 About GPX schema: [https://www.topografix.com/gpx.asp](https://www.topografix.com/gpx.asp)
+
 More on [Wikipedia](https://en.wikipedia.org/wiki/GPS_Exchange_Format)
