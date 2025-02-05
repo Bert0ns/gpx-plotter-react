@@ -13,12 +13,12 @@ Deployed here: [https://gpx-plotter-react.vercel.app/](https://gpx-plotter-react
 
 ## TODO
 
-1) Transition to react
+1) - [ ] Transition to react
 2) - [ ] Improve chart visualization
    - [ ] find bugs
-   - [ ] Add the possibility to edit fonts on the chart
+   - [x] Add the possibility to edit text on the chart
    - [ ] Improve chart performance
-   - [ ] improve file read visual by inserting a card for each file, containing relevant information
+   - [x] improve file read visual by inserting a card for each file, containing relevant information
    - [ ] Add a remove button on the file cards
    - [ ] Add a way to trim data at the ends of the chart
 
