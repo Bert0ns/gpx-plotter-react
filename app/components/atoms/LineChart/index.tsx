@@ -3,15 +3,18 @@ import React from "react";
 import {Line} from "react-chartjs-2";
 import {Chart} from "chart.js/auto";
 import { CategoryScale } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels"
 import {TypedChartComponent} from "@/node_modules/react-chartjs-2/dist/types";
-Chart.register(CategoryScale)
+Chart.register(CategoryScale, ChartDataLabels)
+
 
 const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(({chartXDataLabels, chartYData, chartTitle,
                                                                                       displayLegend, displayChartPoints, isSmoothVisual,
                                                                                      displayAxis, colorChartTitle, chartLineColor, chartLineBorderWidth
-                                                                                     , chartBackgroundColor, chartTitleFontSize, isResponsive,
+                                                                                     , chartBackgroundColor, chartTitleFontSize, isResponsive, dataLabels,
                                                                                      ...props}
-                                                                                    , ref) => {
+, ref) => {
+    const defaultLabelTextColor = "#000000";
 
     const chartData = {
         labels: chartXDataLabels,
@@ -78,22 +81,43 @@ const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(
             }, canvasBackgroundColor: {
                 color: chartBackgroundColor ? chartBackgroundColor : "#ffffff",
             }, datalabels: {
-                textAlign: 'center',
-                align: 'end',
-                anchor: 'end',
-                padding: 0, //clamp: true,
-                /*
+                //textAlign: 'center',
+                align: 'top' as const,
+                anchor: 'end' as const,
+                //padding: 0,
+
+                //clamp: true,
                 //clip: true,
+                // @ts-expect-error context
                 font: function (context) {
-                    return displayDataLabelFont(context, dataLabels);
-                }, display: function (context) {
-                    return displayDataLabelVisualEnabler(context, dataLabels);
-                }, formatter: function (value, context) {
-                    return displayDataLabelVisualText(value, context, dataLabels);
-                }, color: function (context) {
-                    return displayDataLabelVisualColor(context, dataLabels);
-                }
-                */
+                    const font = {
+                        weight: 'bold',
+                        family: 'Roboto, sans-serif',
+                        size: 10,
+                    }
+                    if (dataLabels === undefined) {return font}
+                    const label = dataLabels.find(label => context.chart.data.labels[context.dataIndex] === label.x);
+                    if (label === undefined) {return font}
+                    font.size = label.fontSize
+                    return font
+                },
+                // @ts-expect-error context
+                color: function (context) {
+                    if (dataLabels === undefined) {return defaultLabelTextColor}
+                    const label = dataLabels.find((label) => label.x === context.chart.data.labels[context.dataIndex])
+                    return label ? label.fontColor : defaultLabelTextColor
+                },
+                // @ts-expect-error context
+                display: (context) => {
+                    if (dataLabels === undefined) { return false; }
+                    return dataLabels.some((label) => label.x === context.chart.data.labels[context.dataIndex])
+                },
+                // @ts-expect-error context
+                formatter: (value: never, context) => {
+                    if (dataLabels === undefined) { return ""; }
+                    const label = dataLabels.find((label) => label.x === context.chart.data.labels[context.dataIndex])
+                    return label ? label.label : ""
+                },
             },
         },
     }

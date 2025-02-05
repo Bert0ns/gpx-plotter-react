@@ -1,4 +1,5 @@
 import React from "react";
+import {IDataLabel} from "@/app/components/atoms/DataLabel/index.types";
 
 export default interface LineChartProps extends React.HTMLProps<HTMLDivElement> {
     chartXDataLabels: number[];
@@ -14,4 +15,5 @@ export default interface LineChartProps extends React.HTMLProps<HTMLDivElement> 
     displayChartPoints?: boolean
     isSmoothVisual?: boolean
     isResponsive?: boolean
+    dataLabels?: IDataLabel[]
 }

@@ -8,12 +8,14 @@ import {readFile} from "@/lib/fileUtils";
 import {parseGPX, extractFileParsedData, getDataPointsAxis} from "@/lib/gpxUtils";
 import {GpxSummaryData} from "@/lib/types/gpx";
 import {Button} from "@/app/components/ui/button";
-import {generateUniqueKey} from "@/lib/utils";
+import {generateUniqueKey} from "@/lib/chartUtils";
 import LineChart from "@/app/components/atoms/LineChart";
 import VisibleDiv from "@/app/components/atoms/VisibleDiv";
 import CheckBox from "@/app/components/atoms/CheckBox";
 import {TypedChartComponent} from "@/node_modules/react-chartjs-2/dist/types";
 import FileCardList from "@/app/components/FileCardList";
+import DataLabel from "@/app/components/atoms/DataLabel";
+import { IDataLabel } from "@/app/components/atoms/DataLabel/index.types";
 
 export type FileGpx = {
     key: number;
@@ -131,6 +133,17 @@ export default function Home() {
         }
     }
 
+    const [dataLabels, setDataLabels] = useState<IDataLabel[]>([])
+    const addDataLabel = () => {
+        setDataLabels([...dataLabels, { id: generateUniqueKey(), x: 0, label: "", fontSize: 10, fontColor: "#000000"}])
+    }
+    const removeDataLabel = (id: number) => {
+        setDataLabels(dataLabels.filter((label) => label.id !== id))
+    }
+    const updateDataLabel = ({id, x, label, fontSize, fontColor}: IDataLabel) => {
+        setDataLabels(dataLabels.map((dataLabel) => (dataLabel.id === id ? { ...dataLabel, x, label, fontSize, fontColor } : dataLabel)))
+    }
+
     return (
         <main>
             <MainTitle/>
@@ -138,7 +151,7 @@ export default function Home() {
             <FileCardList cards={fileCardsData} setCards={setFileCardsData} onOrderChange={handleOrderChange}/>
 
             <VisibleDiv className="flex justify-center m-4" isVisible={isButtonPlotElevationVisible}>
-                <Button onClick={handleButtonPlotElevationClick} variant="secondary" size="lg" title="Click to plot the tracks elevation on a chart">Plot elevation</Button>
+                <Button onClick={handleButtonPlotElevationClick} variant="default" size="lg" title="Click to plot the tracks elevation on a chart">Plot elevation</Button>
             </VisibleDiv>
 
             <VisibleDiv className="flex flex-col justify-center m-4" isVisible={isChartVisible}>
@@ -158,9 +171,22 @@ export default function Home() {
                            isSmoothVisual={chartSmoothVisual}
                            ref={chartRef}
                            isResponsive={true}
+                           dataLabels={dataLabels}
                 />
+
+                <div className="space-y-4 mt-4 p-2 shadow-2xl rounded-lg border-2 border-gray-300">
+                    <Button onClick={addDataLabel}>Add Data Label</Button>
+                    {dataLabels.map((dataLabel) => (
+                        <DataLabel
+                            key={dataLabel.id}
+                            label={dataLabel}
+                            onRemove={removeDataLabel}
+                            onUpdate={updateDataLabel}
+                        />
+                    ))}
+                </div>
+
                 <div className="mt-4 flex flex-col items-center shadow-2xl rounded-lg border-2 border-gray-300">
-                    <h3 className="text-3xl font-bold text-gray-800">Chart customization options:</h3>
                     <div className="flex-wrap flex flex-row">
                         <CheckBox onChange={setDisplayLegend} checked={displayLegend} label={"Display Legend"} title="Show or hide the chart legend" className={"max-h-10 bg-gradient-to-br gradient from-gray-400 to-gray-50"}/>
                         <CheckBox onChange={setChartAxisVisual} checked={chartAxisVisual} label={"Show Axis"} title="Show or hide the chart axis" className={"max-h-10 bg-gradient-to-br gradient from-gray-400 to-gray-50"}/>
@@ -177,7 +203,7 @@ export default function Home() {
                             <div className="flex items-center justify-between space-x-2">
                                 <label htmlFor="widthLineChart" className="text-sm font-medium text-gray-800">Width</label>
                                 <div className="flex items-center space-x-2">
-                                    <input type="number" onChange={(width) => setChartLineBorderWidth(parseInt(width.target.value))} defaultValue={chartLineBorderWidth} id="widthLineChart" min="0" max="35" title="Change the width of the line on the chart" className="w-16 px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"/>
+                                    <input type="number" onChange={(width) => setChartLineBorderWidth(parseInt(width.target.value))} defaultValue={chartLineBorderWidth} id="widthLineChart" min="1" max="35" title="Change the width of the line on the chart" className="w-16 px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"/>
                                     <span className="text-sm text-gray-500">px</span>
                                 </div>
                             </div>
@@ -197,12 +223,8 @@ export default function Home() {
                     </div>
                 </div>
 
-                <div id="dataLabelsContainer">
-                    <input type="button" id="btnAddDataLabel" value="Add Data Label" title="Create a new label to position on the chart"/>
-                </div>
-
                 <div className="flex justify-center">
-                    <Button onClick={() => downloadChartImage(chartRef)} title="Click to download the chart a .png image" className="mt-4">Download chart Image</Button>
+                    <Button variant="default" onClick={() => downloadChartImage(chartRef)} title="Click to download the chart a .png image" className="mt-4">Download chart Image</Button>
                 </div>
             </VisibleDiv>
 
