@@ -1,38 +1,29 @@
 # GPX Viewer
-#### Javascript - html webapp
+
+Plot your tracks and see the elevation profile! 
+Works with tracks and/or routes.
+
+Deployed here: [https://gpx-plotter-react.vercel.app/](https://gpx-plotter-react.vercel.app)
 
 ## Getting Started
 
-1) Run the development server:
-   - `npm run dev`
-2) Open [http://localhost:3000](http://localhost:3000) with your browser
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1) Install dependencies:
+   `npm install`
+2) Run the development server:
+   `npm run dev`
+3) Open [http://localhost:3000](http://localhost:3000) with your browser
 
 ## TODO
 
 1) Transition to react
-2) - https://blog.logrocket.com/using-chart-js-react/
-   - Improve chart visualization
-   - find bugs
-   - Add the possibility to edit fonts on the chart
-   - Improve chart performance
-   - improve file read visual by inserting a card for each file, containing relevant information 
-   - Add a way to trim data at the ends of the chart
+2) - [] Improve chart visualization
+   - [] find bugs
+   - [] Add the possibility to edit fonts on the chart
+   - [] Improve chart performance
+   - [] improve file read visual by inserting a card for each file, containing relevant information
+   - [] Add a remove button on the file cards
+   - [] Add a way to trim data at the ends of the chart
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+About GPX schema: [https://www.topografix.com/gpx.asp](https://www.topografix.com/gpx.asp)
