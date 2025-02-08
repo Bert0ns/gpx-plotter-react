@@ -5,6 +5,7 @@
   "private": true,
   "main": "main.js",
   "description": "gpx parser and plotter",
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
