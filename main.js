@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import isDev from 'electron-is-dev';
 import path from "node:path";
+import * as url from "node:url";
 
 /*
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -29,7 +30,7 @@ function createWindow() {
         win.loadURL('http://localhost:3000')
     }
     else {
-        win.loadURL(path.join(__dirname, '/../out/index.html'));
+        win.loadURL(`file://${__dirname}/out/index.html`);
     }
 
     if (isDev) {

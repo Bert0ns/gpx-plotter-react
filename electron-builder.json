@@ -6,8 +6,8 @@
     "output": "dist"
   },
   "files": [
-    "out/**/*",
-    "main.js"
+    "./out/**/*",
+    "./main.js"
   ],
   "win": {
     "target": "nsis"
