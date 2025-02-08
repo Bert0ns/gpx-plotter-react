@@ -1,6 +1,21 @@
 import { app, BrowserWindow } from 'electron';
+import serve from 'electron-serve';
 import isDev from 'electron-is-dev';
 import path from "node:path";
+
+/*
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { app, BrowserWindow } = require("electron");
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const serve = require("electron-serve");
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const path = require("path");
+*/
+
+const __dirname = import.meta.dirname;
+const appServe = app.isPackaged ? serve({
+    directory: path.join(__dirname, "../out")
+}) : null;
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -18,11 +33,17 @@ function createWindow() {
         win.loadURL('http://localhost:3000')
     }
     else {
-        win.loadFile(`file://${path.join(__dirname, '../out/index.html')}`);
+        appServe(win).then(() => {
+            win.loadURL("app://-");
+        });
     }
 
     if (isDev) {
         win.webContents.openDevTools(); // Open DevTools in development
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        win.webContents.on("did-fail-load", (e, code, desc) => {
+            win.webContents.reloadIgnoringCache();
+        });
     }
 }
 
