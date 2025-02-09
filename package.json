@@ -1,20 +1,28 @@
 {
+  "author": "Bert0ns",
   "name": "gpxviewer3",
   "version": "0.1.0",
   "private": true,
+  "main": "main.js",
+  "description": "gpx parser and plotter",
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "electron-dev": "electron .",
+    "electron-build": "electron-builder"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",
     "@radix-ui/react-slot": "^1.1.1",
+    "@vercel/analytics": "^1.4.1",
     "chart.js": "^4.4.7",
     "chartjs-plugin-datalabels": "^2.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "electron-is-dev": "^3.0.1",
     "gpxparser": "^3.0.8",
     "lucide-react": "^0.474.0",
     "next": "15.1.6",
@@ -29,6 +37,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "electron": "^34.1.1",
+    "electron-builder": "^25.1.8",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
     "postcss": "^8",
