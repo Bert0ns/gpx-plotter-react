@@ -7,8 +7,9 @@ const MainTitle: FC = () => {
             <Image
                 src="/images/home_image.jpg"
                 alt="Background image GPX plotter"
-                layout="fill"
-                objectFit="cover"
+                className="absolute inset-0 w-full h-full object-cover"
+                height={1280}
+                width={1920}
                 priority
             />
             <div className="absolute inset-0 flex items-center justify-center">
