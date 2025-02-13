@@ -2,7 +2,7 @@
 
 import MainTitle from "@/app/components/atoms/MainTitle";
 import FileSelector from "@/app/components/atoms/FileSelector";
-import {RefObject, useRef, useState} from "react";
+import {RefObject, useCallback, useEffect, useRef, useState} from "react";
 import {readFile} from "@/lib/fileUtils";
 import {parseGPX, extractFileParsedData, getDataPointsAxis} from "@/lib/gpxUtils";
 import {FileGpx, GpxSummaryData} from "@/lib/types/gpx";
@@ -90,12 +90,23 @@ export default function Home() {
         setIsButtonPlotElevationVisible(true);
     }
 
-    function updateDataInChart() {
+    const updateDataInChart = useCallback(() => {
         const {elevPoints, distPoints} = getDataPointsAxis(filesGpxParsed.map(file => file.fileParsed));
         setElevationPoints(elevPoints);
         setDistancePoints(distPoints);
-    }
+    }, [filesGpxParsed]);
 
+    useEffect(() => {
+        if (filesGpxParsed.length === 0) {
+            setIsButtonPlotElevationVisible(false);
+            setIsChartVisible(false);
+        }
+        if(isChartVisible)
+        {
+            updateDataInChart();
+        }
+    }, [filesGpxParsed, isChartVisible, updateDataInChart])
+    
     function handleButtonPlotElevationClick() {
         if (!filesGpxParsed || filesGpxParsed.length === 0) {
             return;
@@ -131,18 +142,6 @@ export default function Home() {
         }
     }
 
-    function handleFileCardRemove(cardKeyToRemove: number) {
-        removeFileGpxParsed(cardKeyToRemove);
-        if (filesGpxParsed.length === 0) {
-            setIsButtonPlotElevationVisible(false);
-            setIsChartVisible(false);
-        }
-        if (isChartVisible) {
-            updateDataInChart()
-        }
-        console.log({cardKeyToRemove, filesGpxParsed})
-    }
-
     const [dataLabels, setDataLabels] = useState<IDataLabel[]>([])
     const addDataLabel = () => {
         setDataLabels([...dataLabels, {id: generateUniqueKey(), x: 0, label: "", fontSize: 10, fontColor: "#000000"}])
@@ -165,7 +164,7 @@ export default function Home() {
             <MainTitle/>
             <FileSelector onFileSelect={handleSelectedFiles} value="Upload .gpx Files"
                           title="Click to upload one or more .gpx files"/>
-            <FileCardList ref={fileCardListRef} onOrderChange={handleOrderChange} onCardRemove={handleFileCardRemove}/>
+            <FileCardList ref={fileCardListRef} onOrderChange={handleOrderChange} onCardRemove={removeFileGpxParsed}/>
 
             <VisibleDiv className="flex justify-center m-4" isVisible={isButtonPlotElevationVisible}>
                 <Button onClick={handleButtonPlotElevationClick} variant="default" size="lg"
