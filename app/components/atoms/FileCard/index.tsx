@@ -1,8 +1,13 @@
 import FileCardProps from "@/app/components/atoms/FileCard/index.types";
 import { FC } from "react";
 import {Draggable} from "@hello-pangea/dnd";
+import {Button} from "@/app/components/ui/button";
 
-const FileCard: FC<FileCardProps> = ({value, index}) => {
+const FileCard: FC<FileCardProps> = ({value, index, onClickRemove}) => {
+    function handleRemoveClick() {
+        onClickRemove(value);
+    }
+
     return (
         <Draggable draggableId={value.key.toString()} index={index}>
             {(provided) => (
@@ -15,8 +20,9 @@ const FileCard: FC<FileCardProps> = ({value, index}) => {
                     <h1 className="font-bold text-xl text-zinc-800">{index + 1} File data</h1>
                     <p className="text-sm text-zinc-500">
                         File name: <strong>{value.filename}</strong> <br/>
-                        Author: {/*value.author.name ? value.author.name : */"unknown"} <br/>
-                        Description: {value.description !== null ? value.description : "--"} <br/>
+                        {/* @ts-expect-error name*/}
+                        {value.author.name ? "Author: " + value.author + <br/>: null}
+                        {value.description !== null ? "Description:" + value.description + <br/> : null}
                     </p>
                     <h2 className="font-bold text-xl text-zinc-800">{value.whatIsShown}</h2>
                     <p className="text-sm text-zinc-500">
@@ -27,6 +33,7 @@ const FileCard: FC<FileCardProps> = ({value, index}) => {
                         Positive Elevation difference: {value.posElevationDiff ? value.posElevationDiff.toFixed(2) : "--"} <br/>
                         Negative Elevation difference: {value.negElevationDiff ? value.negElevationDiff.toFixed(2) : "--"} <br/>
                     </p>
+                    <Button variant="destructive" className="w-full h-8" onClick={handleRemoveClick}>Remove</Button>
                 </div>
             )}
         </Draggable>

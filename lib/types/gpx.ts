@@ -14,3 +14,8 @@ export interface GpxSummaryData {
     posElevationDiff: number
     negElevationDiff: number
 }
+
+export type FileGpx = {
+    key: number;
+    fileParsed: GpxParser;
+}

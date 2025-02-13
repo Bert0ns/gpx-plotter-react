@@ -1,8 +1,11 @@
 import FileCardProps from "@/app/components/atoms/FileCard/index.types";
-import React from "react";
+import {GpxSummaryData} from "@/lib/types/gpx";
 
 export default interface FileCardListProps {
-    cards: FileCardProps["value"][];
-    setCards: React.Dispatch<React.SetStateAction<FileCardProps["value"][]>>;
     onOrderChange?: (newOrder: FileCardProps["value"][]) => void;
+    onCardRemove?: (removedCardKey: number) => void;
+}
+
+export interface FileCardListRef {
+    addFileCardData: (data: GpxSummaryData) => void
 }
