@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/app/components/ui/button"
-import { Map, Github } from "lucide-react"
+import { Github } from "lucide-react"
 
 export default function AboutPage() {
     return (
@@ -21,13 +21,13 @@ export default function AboutPage() {
                                 <p className="text-gray-600 dark:text-gray-400">
                                     Our mission is to provide hikers, cyclists, and explorers with an easy-to-use platform to transform
                                     their GPS data into meaningful and beautiful visualizations. We believe that every adventure has a
-                                    story, and we're here to help you tell it through data.
+                                    story, and we&#39;re here to help you tell it through data.
                                 </p>
                             </div>
                             <div>
                                 <h2 className="text-2xl font-semibold mb-4">What We Do</h2>
                                 <p className="text-gray-600 dark:text-gray-400">
-                                    GPX Plotter takes your .gpx files and turns them into interactive elevation charts. Whether you're
+                                    GPX Plotter takes your .gpx files and turns them into interactive elevation charts. Whether you&#39;re
                                     analyzing your performance, reliving your journey, or planning your next trip, our tool provides
                                     valuable insights into your outdoor activities.
                                 </p>
@@ -35,15 +35,15 @@ export default function AboutPage() {
                             <div>
                                 <h2 className="text-2xl font-semibold mb-4">Our Team</h2>
                                 <p className="text-gray-600 dark:text-gray-400">
-                                    We're a small team of outdoor enthusiasts and tech lovers. Our diverse backgrounds in software
-                                    development, data visualization, and adventure sports come together to create a tool that we're truly
+                                    We&#39;re a small team of outdoor enthusiasts and tech lovers. Our diverse backgrounds in software
+                                    development, data visualization, and adventure sports come together to create a tool that we&#39;re truly
                                     passionate about.
                                 </p>
                             </div>
                             <div>
                                 <h2 className="text-2xl font-semibold mb-4">Open Source</h2>
                                 <p className="text-gray-600 dark:text-gray-400">
-                                    We believe in the power of community and open source. That's why GPX Plotter is freely available on
+                                    We believe in the power of community and open source. That&#39;s why GPX Plotter is freely available on
                                     GitHub. We welcome contributions, feedback, and collaboration from fellow developers and outdoor
                                     enthusiasts.
                                 </p>
