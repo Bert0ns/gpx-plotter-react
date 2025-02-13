@@ -17,7 +17,7 @@ const FileSelector: FC<FileSelectorProps> = ({onFileSelect, value, title }) => {
     };
 
     return (
-        <div className="flex justify-center" >
+        <div className="flex justify-center mb-4" >
             <div className="relative group">
                 <button onClick={handleUploadClick} title={title} className="relative inline-block p-px font-semibold leading-6 text-white bg-gradient-to-r from-violet-700 to-violet-400 shadow-2xl cursor-pointer rounded-xl shadow-zinc-900 transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95">
                     <span
