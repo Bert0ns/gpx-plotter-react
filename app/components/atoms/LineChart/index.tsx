@@ -8,11 +8,14 @@ import {TypedChartComponent} from "@/node_modules/react-chartjs-2/dist/types";
 Chart.register(CategoryScale, ChartDataLabels)
 
 
-const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(({chartXDataLabels, chartYData, chartTitle,
-                                                                                      displayLegend, displayChartPoints, isSmoothVisual,
-                                                                                     displayAxis, colorChartTitle, chartLineColor, chartLineBorderWidth
-                                                                                     , chartBackgroundColor, chartTitleFontSize, isResponsive, dataLabels,
-                                                                                     ...props}
+const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>((
+{
+chartXDataLabels, chartYData, chartTitle,
+displayLegend, displayChartPoints, isSmoothVisual,
+displayAxis, colorChartTitle, chartLineColor, chartLineBorderWidth
+, chartBackgroundColor, chartTitleFontSize, isResponsive, dataLabels, animationsEnabled,
+...props
+}
 , ref) => {
     const defaultLabelTextColor = "#000000";
 
@@ -52,6 +55,7 @@ const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(
         responsive: isResponsive !== undefined ? isResponsive : false,
         maintainAspectRatio: false,
         normalized: true, //parsing: false,
+        animation: animationsEnabled !== undefined ? animationsEnabled : true,
         scales: {
             x: {
                 display: displayAxis !== undefined ? displayAxis : true, ticks: {

@@ -172,6 +172,7 @@ export default function Home() {
                            ref={chartRef}
                            isResponsive={true}
                            dataLabels={dataLabels}
+                           animationsEnabled={distancePoints.length < 3000}
                 />
 
                 <div className="space-y-4 mt-4 p-2 shadow-2xl rounded-lg border-2 border-gray-300">

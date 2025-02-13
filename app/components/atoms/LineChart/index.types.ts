@@ -16,4 +16,5 @@ export default interface LineChartProps extends React.HTMLProps<HTMLDivElement> 
     isSmoothVisual?: boolean
     isResponsive?: boolean
     dataLabels?: IDataLabel[]
+    animationsEnabled?: boolean
 }
