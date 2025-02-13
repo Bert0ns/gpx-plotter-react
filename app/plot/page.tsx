@@ -46,7 +46,7 @@ export default function Home() {
 
     function downloadChartImage(chartRef: RefObject<TypedChartComponent<"line"> | null>): void {
         if (chartRef.current) {
-            console.log({...chartRef.current})
+            //console.log({...chartRef.current})
             const link = document.createElement("a")
             link.download = "chart.png"
             // @ts-expect-error exists

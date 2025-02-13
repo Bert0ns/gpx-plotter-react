@@ -131,6 +131,20 @@ displayAxis, colorChartTitle, chartLineColor, chartLineBorderWidth
         <div {...props}>
             {/* @ts-expect-error font is not recognized as a valid type -> but it is*/}
             <Line ref={ref} data={chartData} options={chartOptions} plugins={chartPlugins} className="w-[1000px] h-[700px]"/>
+            {/* To block the auto resizing of the chart
+            <div className="relative w-full overflow-x-auto">
+            <div className="min-w-[1000px]">
+            <Line
+                ref={ref}
+                data={chartData}
+                options={chartOptions}
+                plugins={chartPlugins}
+                className="w-[1000px] h-[700px]"
+            />
+            </div>
+            </div>
+
+            */}
         </div>
     )
 })
