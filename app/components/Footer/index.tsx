@@ -17,7 +17,7 @@ const Footer: FC = () => {
                     </div>
                     <div className="text-center">
                         <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Quick Links</h3>
-                        <ul className="space-y-2">
+                        <ul className="space-y-1">
                             <li>
                                 <Link
                                     href="/"
@@ -30,6 +30,13 @@ const Footer: FC = () => {
                                     href="/about"
                                     className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
                                     About
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/plot"
+                                    className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
+                                    Plot
                                 </Link>
                             </li>
                         </ul>
