@@ -13,17 +13,15 @@ Deployed here: [https://gpx-plotter-react.vercel.app/](https://gpx-plotter-react
 
 ## TODO
 
-1) - [x] Full transition to react
-2) - [ ] Improve chart visualization
-      - [ ] Make a standard chart size
-   - [ ] find bugs
-   - [x] Add the possibility to edit text on the chart
-   - [ ] Improve chart performance
-      - [x] Disable chart animations when dataset surpasses a certain size
-   - [x] improve file read visual by inserting a card for each file, containing relevant information
-      - [x] Add a remove button to each file card
+- [ ] Improve chart visualization
+  - [ ] Make a standard chart size
+  - [ ] Make the downloaded image always of the same size
+- [ ] find bugs
+- [ ] Improve chart performance
+   - [x] Disable chart animations when dataset surpasses a certain size
    - [ ] Add a way to trim data at the ends of the chart
-   - [x] Create a cool landing page
+- [x] Create a cool landing page
+  - [ ] Make it more colorful
 
 ## Learn More
 
