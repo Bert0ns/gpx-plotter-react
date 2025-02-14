@@ -5,30 +5,26 @@ import Link from "next/link";
 export default function LandingPage() {
     return (
         <main>
-            <section className="w-full py-4 md:py-24 lg:py-32 xl:py-44">
-                <div className="container mx-auto max-w-7xl px-4 md:px-6">
-                    <div className="flex flex-col items-center space-y-4 text-center">
-                        <div className="space-y-2">
-                            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-                                Visualize Your Adventures with GPX Plotter
-                            </h1>
-                            <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                                Transform your .gpx files into beautiful, interactive elevation charts. Perfect for
-                                hikers, cyclists,
-                                and outdoor enthusiasts.
-                            </p>
-                        </div>
-                        <div className="space-x-4">
-                            <Link href={"/plot"}>
-                                <Button>
-                                    Get Started <ArrowRight className="ml-2 h-4 w-4"/>
-                                </Button>
-                            </Link>
-                            <Link href={"/about"}>
-                                <Button variant="outline">Learn More</Button>
-                            </Link>
-                        </div>
-                    </div>
+            <section className="flex flex-col items-center w-full py-4 md:py-24 lg:py-32 xl:py-44     space-y-4 text-center container mx-auto max-w-7xl px-4 md:px-6">
+                <div className="space-y-2">
+                    <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+                        Visualize Your Adventures with GPX Plotter
+                    </h1>
+                    <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+                        Transform your .gpx files into beautiful, interactive elevation charts. Perfect for
+                        hikers, cyclists,
+                        and outdoor enthusiasts.
+                    </p>
+                </div>
+                <div className="space-x-4">
+                    <Link href={"/plot"}>
+                        <Button size={"lg"}>
+                            Get Started <ArrowRight className="ml-2 h-4 w-4"/>
+                        </Button>
+                    </Link>
+                    <Link href={"/about"}>
+                        <Button variant="outline" size={"lg"}>Learn More</Button>
+                    </Link>
                 </div>
             </section>
             <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">

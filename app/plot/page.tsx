@@ -17,7 +17,7 @@ import DataLabel from "@/app/components/atoms/DataLabel";
 import {IDataLabel} from "@/app/components/atoms/DataLabel/index.types";
 import {FileCardListRef} from "@/app/components/FileCardList/index.types";
 
-export default function Home() {
+export default function PlotPage() {
     const fileCardListRef = useRef<FileCardListRef>(null);
     const chartRef = useRef<TypedChartComponent<"line">>(null)
     const [elevationPoints, setElevationPoints] = useState<number[]>([100, 150, 400, 50, 50]);
