@@ -10,7 +10,7 @@ const DataLabel: React.FC<DataLabelProps> = ({ label, onRemove, onUpdate }) => {
                 type="number"
                 min="0"
                 placeholder="X coordinate"
-                className="w-28"
+                className="max-w-28 min-w-16"
                 value={label.x}
                 onChange={(e: { target: { value: string | undefined; } }) => {
                     const newLabel : IDataLabel = { ...label }
@@ -21,7 +21,7 @@ const DataLabel: React.FC<DataLabelProps> = ({ label, onRemove, onUpdate }) => {
             <Input
                 type="text"
                 placeholder="Label text"
-                className="flex-grow"
+                className="flex-grow min-w-8"
                 value={label.label}
                 onChange={(e: { target: { value: string; }; }) => {
                     const newLabel : IDataLabel = { ...label }
@@ -33,7 +33,7 @@ const DataLabel: React.FC<DataLabelProps> = ({ label, onRemove, onUpdate }) => {
             type="number"
             min="1"
             placeholder="Font size"
-            className="w-20"
+            className="max-w-20 min-w-14"
             value={label.fontSize}
             onChange={(e: { target: { value: string; } }) => {
                 const newLabel : IDataLabel = { ...label }
@@ -44,7 +44,7 @@ const DataLabel: React.FC<DataLabelProps> = ({ label, onRemove, onUpdate }) => {
             <Input
                 type="color"
                 placeholder="Font color"
-                className="w-20"
+                className="max-w-16 min-w-4 p-0"
                 value={label.fontColor}
                 onChange={(e: { target: { value: string; } }) => {
                     const newLabel : IDataLabel = { ...label }
@@ -52,7 +52,7 @@ const DataLabel: React.FC<DataLabelProps> = ({ label, onRemove, onUpdate }) => {
                     onUpdate(newLabel);
                 }}
             />
-            <Button variant="destructive" onClick={() => onRemove(label.id)}>
+            <Button variant="destructive" size="sm" onClick={() => onRemove(label.id)}>
                 Remove
             </Button>
         </div>
