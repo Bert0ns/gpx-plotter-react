@@ -1,7 +1,6 @@
 import CheckBoxProps from "@/app/components/atoms/CheckBox/index.types";
 import {FC, useState} from "react";
 import {Button} from "@/app/components/ui/button";
-import {cn} from "@/lib/utils";
 
 const CheckBox: FC<CheckBoxProps> = ({label, onChange, className, checked, title}) => {
     const [isChecked, setIsChecked] = useState(!!checked)
