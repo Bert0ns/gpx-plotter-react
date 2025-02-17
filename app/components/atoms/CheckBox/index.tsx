@@ -1,7 +1,9 @@
 import CheckBoxProps from "@/app/components/atoms/CheckBox/index.types";
 import {FC, useState} from "react";
+import {Button} from "@/app/components/ui/button";
+import {cn} from "@/lib/utils";
 
-const CheckBox : FC<CheckBoxProps> = ({label, onChange, className, checked , title}) => {
+const CheckBox: FC<CheckBoxProps> = ({label, onChange, className, checked, title}) => {
     const [isChecked, setIsChecked] = useState(!!checked)
 
     const handleToggle = () => {
@@ -13,22 +15,20 @@ const CheckBox : FC<CheckBoxProps> = ({label, onChange, className, checked , tit
     }
 
     return (
-        <label title={title ? title : "Checkbox"} className={`flex p-2 m-2 rounded-lg shadow uppercase hover:scale-105 transition-transform duration-200 ease-in-out ${className}`}>
+        <Button title={title ? title : "Checkbox"} variant="checkbox" onClick={handleToggle} className={className}>
             <div className="relative">
-                <input type="checkbox" className="sr-only" checked={isChecked} onChange={handleToggle} />
-                <div
-                    className={`w-6 h-6 border-2 rounded-md transition-all duration-200 ease-in-out 
-                    ${ isChecked ? "bg-blue-500 border-blue-500" : "bg-white border-gray-300"}`}>
+                <input type="checkbox" className="sr-only" checked={isChecked} onChange={handleToggle}/>
+                <div className={`w-5 h-5 border-2 rounded-md transition-all duration-200 ease-in-out ${isChecked ? "bg-blue-500 border-blue-500" : "bg-white border-gray-300"}`}>
                     <svg
                         className={`w-4 h-4 text-white fill-current absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-200 ease-in-out 
-                        ${isChecked ? "opacity-100" : "opacity-0" }`}
+                        ${isChecked ? "opacity-100" : "opacity-0"}`}
                         viewBox="0 0 20 20">
-                        <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
+                        <path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/>
                     </svg>
                 </div>
             </div>
             <span className="ml-2">{label}</span>
-        </label>
+        </Button>
     )
 }
 

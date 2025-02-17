@@ -4,7 +4,7 @@ import MainTitle from "@/app/components/atoms/MainTitle";
 import FileSelector from "@/app/components/atoms/FileSelector";
 import {RefObject, useCallback, useEffect, useRef, useState} from "react";
 import {readFile} from "@/lib/fileUtils";
-import {parseGPX, extractFileParsedData, getDataPointsAxis} from "@/lib/gpxUtils";
+import {extractFileParsedData, getDataPointsAxis, parseGPX} from "@/lib/gpxUtils";
 import {FileGpx, GpxSummaryData} from "@/lib/types/gpx";
 import {Button} from "@/app/components/ui/button";
 import {generateUniqueKey} from "@/lib/chartUtils";
@@ -101,12 +101,11 @@ export default function PlotPage() {
             setIsButtonPlotElevationVisible(false);
             setIsChartVisible(false);
         }
-        if(isChartVisible)
-        {
+        if (isChartVisible) {
             updateDataInChart();
         }
     }, [filesGpxParsed, isChartVisible, updateDataInChart])
-    
+
     function handleButtonPlotElevationClick() {
         if (!filesGpxParsed || filesGpxParsed.length === 0) {
             return;
@@ -205,70 +204,63 @@ export default function PlotPage() {
                 </div>
 
                 <div className="mt-4 flex flex-col items-center shadow-2xl rounded-lg border-2 border-gray-300">
-                    <div className="flex-wrap flex flex-row">
+                    <div className="flex flex-wrap flex-row space-x-2 space-y-2">
                         <CheckBox onChange={setDisplayLegend} checked={displayLegend} label={"Display Legend"}
-                                  title="Show or hide the chart legend"
-                                  className={"max-h-10 bg-gradient-to-br gradient from-gray-400 to-gray-50"}/>
+                                  title="Show or hide the chart legend" className="ml-2 mt-2"/>
                         <CheckBox onChange={setChartAxisVisual} checked={chartAxisVisual} label={"Show Axis"}
-                                  title="Show or hide the chart axis"
-                                  className={"max-h-10 bg-gradient-to-br gradient from-gray-400 to-gray-50"}/>
+                                  title="Show or hide the chart axis"/>
                         <CheckBox onChange={setChartPointsVisual} checked={chartPointsVisual} label={"Show Points"}
-                                  title="Show or hide the points on the chart"
-                                  className={"max-h-10 bg-gradient-to-br gradient from-gray-400 to-gray-50"}/>
+                                  title="Show or hide the points on the chart"/>
                         <CheckBox onChange={setChartSmoothVisual} checked={chartSmoothVisual} label={"Smooth Chart"}
-                                  title="Make the line chart smoother"
-                                  className={"max-h-10 bg-gradient-to-br gradient from-gray-400 to-gray-50"}/>
+                                  title="Make the line chart smoother"/>
+                    </div>
 
-                        <div
-                            className="m-2 flex flex-row space-x-2 shadow-lg rounded-lg p-2 bg-gradient-to-br gradient from-gray-400 to-gray-50">
-                            <div className="flex items-center justify-between">
-                                <label className="text-sm font-medium text-gray-800 flex items-center space-x-2">
-                                    <span>Line color</span>
-                                    <input type="color" onChange={(color) => setChartLineColor(color.target.value)}
-                                           defaultValue={chartLineColor}
-                                           title="Change the color of the line on the chart"
-                                           className="w-12 h-8 overflow-hidden cursor-pointer"/>
-                                </label>
-                            </div>
-                            <div className="flex items-center justify-between space-x-2">
-                                <label htmlFor="widthLineChart"
-                                       className="text-sm font-medium text-gray-800">Width</label>
-                                <div className="flex items-center space-x-2">
-                                    <input type="number"
-                                           onChange={(width) => setChartLineBorderWidth(parseInt(width.target.value))}
-                                           defaultValue={chartLineBorderWidth} id="widthLineChart" min="1" max="35"
-                                           title="Change the width of the line on the chart"
-                                           className="w-16 px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"/>
-                                    <span className="text-sm text-gray-500">px</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <label
-                            className="m-2 shadow-lg rounded-lg p-2 bg-gradient-to-br gradient from-gray-400 to-gray-50 flex items-center justify-between space-x-2">
-                            <span>Background color</span>
-                            <input type="color" onChange={(color) => setChartBackgroundColor(color.target.value)}
-                                   defaultValue={chartBackgroundColor} title="Change the chart background color"/>
+                    <div className="mt-2 mr-2 ml-2 flex flex-row flex-wrap items-center space-x-4 rounded-lg p-2 bg-primary text-primary-foreground shadow hover:bg-primary/90 hover:scale-105 transition-transform duration-200 ease-in-out">
+                        <label className="text-sm font-medium flex items-center space-x-2">
+                            <span>Line color</span>
+                            <input type="color" onChange={(color) => setChartLineColor(color.target.value)} defaultValue={chartLineColor} title="Change the color of the line on the chart"
+                                   className="w-12 h-8 overflow-hidden cursor-pointer"/>
                         </label>
 
-                        <label
-                            className="m-2 shadow-lg rounded-lg p-2 bg-gradient-to-br gradient from-gray-400 to-gray-50 flex items-center justify-between space-x-2">
-                            <span>Show title</span>
-                            <input type="text" onChange={(event) => setChartTitleText(event.target.value)}
-                                   defaultValue={chartTitleText} title="Change the chart title"/>
-                            <input type="color" onChange={(e) => setColorChartTitle(e.target.value)}
-                                   defaultValue={colorChartTitle} title="Change chart title color"/>
-                            <input type="number" onChange={(e) => setChartTitleFontSize(parseInt(e.target.value))}
-                                   defaultValue={chartTitleFontSize} min="2" max="70"
-                                   title="Change chart title font size"/>
+                        <label className="text-sm font-medium flex items-center space-x-2">
+                            <span>Width</span>
+                            <div className="flex items-center space-x-2">
+                                <input type="number" onChange={(width) => setChartLineBorderWidth(parseInt(width.target.value))} defaultValue={chartLineBorderWidth} id="widthLineChart" min="1" max="35" title="Change the width of the line on the chart"
+                                       className="w-16 px-2 py-1 text-sm text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"/>
+                                <span className="text-sm">px</span>
+                            </div>
                         </label>
                     </div>
+
+                    <label
+                        className="m-2 mb-0 rounded-lg p-2 flex items-center justify-between space-x-2 bg-primary text-primary-foreground shadow hover:bg-primary/90 hover:scale-105 transition-transform duration-200 ease-in-out">
+                        <span>Background color</span>
+                        <input type="color" onChange={(color) => setChartBackgroundColor(color.target.value)}
+                               defaultValue={chartBackgroundColor} title="Change the chart background color"/>
+                    </label>
+
+                    <label
+                        className="m-2 rounded-lg p-2 flex flex-wrap items-center justify-between space-x-2 bg-primary text-primary-foreground shadow hover:bg-primary/90 hover:scale-105 transition-transform duration-200 ease-in-out">
+                        <div className="space-x-2">
+                            <span>Show title</span>
+                            <input type="text" onChange={(event) => setChartTitleText(event.target.value)}
+                                   defaultValue={chartTitleText} title="Change the chart title" className="p-1 text-sm text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"/>
+                        </div>
+                        <input type="color" onChange={(e) => setColorChartTitle(e.target.value)}
+                               defaultValue={colorChartTitle} title="Change chart title color" className="cursor-pointer"/>
+                        <div className="space-x-2">
+                            <input type="number" onChange={(e) => setChartTitleFontSize(parseInt(e.target.value))}
+                                   defaultValue={chartTitleFontSize} min="2" max="70" className="p-1 text-sm text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                   title="Change chart title font size"/>
+                            <span className="text-sm">px</span>
+                        </div>
+                    </label>
                 </div>
 
                 <div className="flex justify-center">
-                    <Button variant="default" onClick={() => downloadChartImage(chartRef)}
-                            title="Click to download the chart a .png image" className="mt-4">Download chart
-                        Image</Button>
+                    <Button variant="default" size="lg" onClick={() => downloadChartImage(chartRef)}
+                            title="Click to download the chart a .png image" className="mt-4">Download chart Image
+                    </Button>
                 </div>
             </VisibleDiv>
 
