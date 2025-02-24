@@ -22,6 +22,7 @@ Deployed here: [https://gpx-plotter-react.vercel.app/](https://gpx-plotter-react
    - [ ] Add a way to trim data at the ends of the chart
 - [x] Create a cool landing page
   - [ ] Make it more colorful
+- [ ] Add a dark/white mode
 
 ## Learn More
 

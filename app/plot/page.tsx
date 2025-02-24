@@ -215,7 +215,7 @@ export default function PlotPage() {
                                   title="Make the line chart smoother"/>
                     </div>
 
-                    <div className="mt-2 mr-2 ml-2 flex flex-row flex-wrap items-center space-x-4 rounded-lg p-2 bg-primary text-primary-foreground shadow hover:bg-primary/90 hover:scale-105 transition-transform duration-200 ease-in-out">
+                    <div className="mt-2 mr-2 ml-2 flex flex-row flex-wrap items-center space-x-4 rounded-lg p-2 bg-violet-700 text-primary-foreground shadow hover:bg-violet-700/90 hover:scale-105 transition-transform duration-200 ease-in-out">
                         <label className="text-sm font-medium flex items-center space-x-2">
                             <span>Line color</span>
                             <input type="color" onChange={(color) => setChartLineColor(color.target.value)} defaultValue={chartLineColor} title="Change the color of the line on the chart"
@@ -233,14 +233,14 @@ export default function PlotPage() {
                     </div>
 
                     <label
-                        className="m-2 mb-0 rounded-lg p-2 flex items-center justify-between space-x-2 bg-primary text-primary-foreground shadow hover:bg-primary/90 hover:scale-105 transition-transform duration-200 ease-in-out">
+                        className="m-2 mb-0 rounded-lg p-2 flex items-center justify-between space-x-2 bg-violet-700 text-primary-foreground shadow hover:bg-violet-700/90 hover:scale-105 transition-transform duration-200 ease-in-out">
                         <span>Background color</span>
                         <input type="color" onChange={(color) => setChartBackgroundColor(color.target.value)}
                                defaultValue={chartBackgroundColor} title="Change the chart background color"/>
                     </label>
 
                     <label
-                        className="m-2 rounded-lg p-2 flex flex-wrap items-center justify-between space-x-2 bg-primary text-primary-foreground shadow hover:bg-primary/90 hover:scale-105 transition-transform duration-200 ease-in-out">
+                        className="m-2 rounded-lg p-2 flex flex-wrap items-center justify-between space-x-2 bg-violet-700 text-primary-foreground shadow hover:bg-violet-700/90 hover:scale-105 transition-transform duration-200 ease-in-out">
                         <div className="space-x-2">
                             <span>Show title</span>
                             <input type="text" onChange={(event) => setChartTitleText(event.target.value)}

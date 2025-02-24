@@ -17,7 +17,7 @@ const CheckBox: FC<CheckBoxProps> = ({label, onChange, className, checked, title
         <Button title={title ? title : "Checkbox"} variant="checkbox" onClick={handleToggle} className={className}>
             <div className="relative">
                 <input type="checkbox" className="sr-only" checked={isChecked} onChange={handleToggle}/>
-                <div className={`w-5 h-5 border-2 rounded-md transition-all duration-200 ease-in-out ${isChecked ? "bg-blue-500 border-blue-500" : "bg-white border-gray-300"}`}>
+                <div className={`w-5 h-5 border-2 rounded-md transition-all duration-200 ease-in-out ${isChecked ? "bg-primary border-primary" : "bg-white border-gray-300"}`}>
                     <svg
                         className={`w-4 h-4 text-white fill-current absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-200 ease-in-out 
                         ${isChecked ? "opacity-100" : "opacity-0"}`}
