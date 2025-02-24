@@ -16,6 +16,7 @@ import FileCardList from "@/app/components/FileCardList";
 import DataLabel from "@/app/components/atoms/DataLabel";
 import {IDataLabel} from "@/app/components/atoms/DataLabel/index.types";
 import {FileCardListRef} from "@/app/components/FileCardList/index.types";
+import {HowItWorks} from "@/app/components/atoms/HowItWorks";
 
 export default function PlotPage() {
     const fileCardListRef = useRef<FileCardListRef>(null);
@@ -161,6 +162,7 @@ export default function PlotPage() {
     return (
         <main>
             <MainTitle/>
+            <HowItWorks/>
             <FileSelector onFileSelect={handleSelectedFiles} value="Upload .gpx Files"
                           title="Click to upload one or more .gpx files"/>
             <FileCardList ref={fileCardListRef} onOrderChange={handleOrderChange} onCardRemove={removeFileGpxParsed}/>
