@@ -161,7 +161,9 @@ export default function PlotPage() {
 
     return (
         <main>
-            <MainTitle/>
+            <div>
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-7xl text-center">Plot here your tracks</h1>
+            </div>
             <HowItWorks/>
             <FileSelector onFileSelect={handleSelectedFiles} value="Upload .gpx Files"
                           title="Click to upload one or more .gpx files"/>
