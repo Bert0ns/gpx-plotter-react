@@ -1,6 +1,5 @@
 "use client"
 
-import MainTitle from "@/app/components/atoms/MainTitle";
 import FileSelector from "@/app/components/atoms/FileSelector";
 import {RefObject, useCallback, useEffect, useRef, useState} from "react";
 import {readFile} from "@/lib/fileUtils";
