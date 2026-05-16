@@ -60,8 +60,8 @@ export function extractFileParsedData(fileGpxParsed : GpxParser, key : number) :
 
     let description = '', author: string | number = '';
     if (fileGpxParsed.metadata) {
-        description = fileGpxParsed.metadata.desc;
-        author = fileGpxParsed.metadata.author;
+        description = fileGpxParsed.metadata.desc ?? '';
+        author = fileGpxParsed.metadata.author ?? '';
     }
 
     return {
