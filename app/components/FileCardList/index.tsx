@@ -46,7 +46,7 @@ const FileCardList = React.forwardRef<FileCardListRef, FileCardListProps>(
 
     return (
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="file-cards">
+        <Droppable droppableId="file-cards" direction="horizontal">
           {(provided) => (
             <div
               {...provided.droppableProps}

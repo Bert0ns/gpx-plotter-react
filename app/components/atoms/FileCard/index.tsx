@@ -16,6 +16,7 @@ const FileCard: FC<FileCardProps> = ({ value, index, onClickRemove }) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          style={provided.draggableProps.style}
         >
           <div className="w-20 h-20 bg-violet-500 rounded-full absolute -right-6 -top-6">
             <svg
