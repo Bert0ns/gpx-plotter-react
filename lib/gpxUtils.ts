@@ -1,12 +1,12 @@
-import GpxParser from "gpxparser"; // Assuming this is the correct import
-import { GpxSummaryData } from "@/lib/types/gpx";
+import GpxParser from "gpxparser";
+import { GpxSummaryData, TrackGpx } from "@/lib/types/gpx";
 
 /**
  * parses the text string given using the GPX format
  * @param fileGPX {string}
  */
 export function parseGPX(fileGPX: string): GpxParser | null {
-  if (fileGPX === null) {
+  if (!fileGPX) {
     console.warn("FileGPX is undefined.");
     return null;
   }
@@ -16,10 +16,7 @@ export function parseGPX(fileGPX: string): GpxParser | null {
   return parsed;
 }
 
-export function extractFileParsedData(
-  fileGpxParsed: GpxParser,
-  key: number,
-): GpxSummaryData {
+export function extractTrackParsedData(trackGpx: TrackGpx): GpxSummaryData {
   let maxElevation = 0,
     minElevation = 0,
     posElevationDiff = 0,
@@ -27,29 +24,29 @@ export function extractFileParsedData(
     totalDistance = 0;
   let whatIsShown = "",
     filename = "";
-  if (fileGpxParsed.tracks.length > 0) {
-    for (let i = 0; i < fileGpxParsed.tracks.length; i++) {
-      totalDistance += fileGpxParsed.tracks[i].distance.total;
-    }
-    maxElevation = fileGpxParsed.tracks[0].elevation.max;
-    minElevation = fileGpxParsed.tracks[0].elevation.min;
-    posElevationDiff = fileGpxParsed.tracks[0].elevation.pos;
-    negElevationDiff = fileGpxParsed.tracks[0].elevation.neg;
+
+  const { fileParsed, type, index, key } = trackGpx;
+
+  if (type === "track" && fileParsed.tracks.length > index) {
+    const track = fileParsed.tracks[index];
+    totalDistance = track.distance.total;
+    maxElevation = track.elevation.max;
+    minElevation = track.elevation.min;
+    posElevationDiff = track.elevation.pos;
+    negElevationDiff = track.elevation.neg;
     whatIsShown = "Track records: ";
-    filename = fileGpxParsed.tracks[0].name;
-  } else if (fileGpxParsed.routes.length > 0) {
-    totalDistance = 0;
-    for (let i = 0; i < fileGpxParsed.routes.length; i++) {
-      totalDistance += fileGpxParsed.routes[i].distance.total;
-    }
-    maxElevation = fileGpxParsed.routes[0].elevation.max;
-    minElevation = fileGpxParsed.routes[0].elevation.min;
-    posElevationDiff = fileGpxParsed.routes[0].elevation.pos;
-    negElevationDiff = fileGpxParsed.routes[0].elevation.neg;
+    filename = track.name || `Track ${index + 1}`;
+  } else if (type === "route" && fileParsed.routes.length > index) {
+    const route = fileParsed.routes[index];
+    totalDistance = route.distance.total;
+    maxElevation = route.elevation.max;
+    minElevation = route.elevation.min;
+    posElevationDiff = route.elevation.pos;
+    negElevationDiff = route.elevation.neg;
     whatIsShown = "Route records: ";
-    filename = fileGpxParsed.routes[0].name;
+    filename = route.name || `Route ${index + 1}`;
   } else {
-    console.error("Could not parse file, maybe corrupted?");
+    console.error("Could not extract track/route data.");
     return {
       author: "",
       description: "",
@@ -68,14 +65,14 @@ export function extractFileParsedData(
 
   let description = "",
     author: string | number = "";
-  if (fileGpxParsed.metadata) {
-    description = fileGpxParsed.metadata.desc ?? "";
-    author = fileGpxParsed.metadata.author ?? "";
+  if (fileParsed.metadata) {
+    description = fileParsed.metadata.desc ?? "";
+    author = fileParsed.metadata.author ?? "";
   }
 
   return {
     key,
-    fileGpxParsed,
+    fileGpxParsed: fileParsed,
     filename,
     author,
     description,
@@ -89,59 +86,45 @@ export function extractFileParsedData(
   };
 }
 
-function getElevationTrackPoints(gpx: GpxParser): number[] {
-  const points = gpx.tracks[0].points;
-  return points.map((p) => p.ele);
+function getElevationPoints(trackGpx: TrackGpx): number[] {
+  const { fileParsed, type, index } = trackGpx;
+  if (type === "track") {
+    return fileParsed.tracks[index].points.map((p) => p.ele);
+  } else {
+    return fileParsed.routes[index].points.map((p) => p.ele);
+  }
 }
 
-function getElevationRoutePoints(gpx: GpxParser): number[] {
-  const points = gpx.routes[0].points;
-  return points.map((p) => p.ele);
+function getDistancePoints(trackGpx: TrackGpx): number[] {
+  const { fileParsed, type, index } = trackGpx;
+  if (type === "track") {
+    // @ts-expect-error library type error
+    return fileParsed.tracks[index].distance.cumul;
+  } else {
+    // @ts-expect-error library type error
+    return fileParsed.routes[index].distance.cumul;
+  }
 }
 
-function getDistanceTrackPoints(gpx: GpxParser): number[] {
-  // @ts-expect-error library type error
-  return gpx.tracks[0].distance.cumul;
-}
-
-function getDistanceRoutePoints(gpx: GpxParser): number[] {
-  // @ts-expect-error library type error
-  return gpx.routes[0].distance.cumul;
-}
-
-export function getDataPointsAxis(filesGpxParsed: GpxParser[]) {
+export function getDataPointsAxis(tracksGpx: TrackGpx[]) {
   let yAxisPoints: number[] = [];
   let xAxisPoints: number[] = [];
-  for (let i = 0; i < filesGpxParsed.length; i++) {
-    if (filesGpxParsed[i].tracks.length > 0) {
-      //plot the tracks
-      yAxisPoints = yAxisPoints.concat(
-        getElevationTrackPoints(filesGpxParsed[i]),
-      );
 
-      const dp = getDistanceTrackPoints(filesGpxParsed[i]).map((p: number) => {
-        if (xAxisPoints.length < 1) {
-          return p;
-        }
-        return p + xAxisPoints[xAxisPoints.length - 1];
-      });
-      xAxisPoints = xAxisPoints.concat(dp);
-    } else if (filesGpxParsed[i].routes.length > 0) {
-      //plot the routes
-      yAxisPoints = yAxisPoints.concat(
-        getElevationRoutePoints(filesGpxParsed[i]),
-      );
+  for (let i = 0; i < tracksGpx.length; i++) {
+    const trackGpx = tracksGpx[i];
 
-      const dp = getDistanceRoutePoints(filesGpxParsed[i]).map((p: number) => {
-        if (xAxisPoints.length < 1) {
-          return p;
-        }
-        return p + xAxisPoints[xAxisPoints.length - 1];
-      });
-      xAxisPoints = xAxisPoints.concat(dp);
-    } else {
-      console.error(`file gpx parsed number ${i} has no tracks and no routes`);
-    }
+    // plot the elevations
+    yAxisPoints = yAxisPoints.concat(getElevationPoints(trackGpx));
+
+    // plot the distances, offsetting by the previous max distance so they connect sequentially
+    const currentDistances = getDistancePoints(trackGpx);
+    const dp = currentDistances.map((p: number) => {
+      if (xAxisPoints.length < 1) {
+        return p;
+      }
+      return p + xAxisPoints[xAxisPoints.length - 1];
+    });
+    xAxisPoints = xAxisPoints.concat(dp);
   }
 
   xAxisPoints = xAxisPoints.map((p) => Number(p.toFixed(1)));

@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
-import { FileGpx, GpxSummaryData } from "@/lib/types/gpx";
+import { TrackGpx, GpxSummaryData } from "@/lib/types/gpx";
 import { readFile } from "@/lib/fileUtils";
 import {
-  extractFileParsedData,
+  extractTrackParsedData,
   getDataPointsAxis,
   parseGPX,
 } from "@/lib/gpxUtils";
@@ -13,7 +13,7 @@ import { RefObject } from "react";
 export function useGpxFiles(
   fileCardListRef: RefObject<FileCardListRef | null>,
 ) {
-  const [filesGpxParsed, setFilesGpxParsed] = useState<FileGpx[]>([]);
+  const [tracksGpx, setTracksGpx] = useState<TrackGpx[]>([]);
   const [elevationPoints, setElevationPoints] = useState<number[]>([
     100, 150, 400, 50, 50,
   ]);
@@ -24,18 +24,18 @@ export function useGpxFiles(
   const [isButtonPlotElevationVisible, setIsButtonPlotElevationVisible] =
     useState<boolean>(false);
 
-  const addFileGpxParsed = (file: FileGpx): void => {
-    setFilesGpxParsed((prev) => [...prev, file]);
+  const addTrackGpx = (track: TrackGpx): void => {
+    setTracksGpx((prev) => [...prev, track]);
   };
 
   const removeFileGpxParsed = (fileKeyToRemove: number): void => {
-    setFilesGpxParsed((prev) => {
-      const newFiles = prev.filter((file) => file.key !== fileKeyToRemove);
-      if (newFiles.length === 0) {
+    setTracksGpx((prev) => {
+      const newTracks = prev.filter((track) => track.key !== fileKeyToRemove);
+      if (newTracks.length === 0) {
         setIsButtonPlotElevationVisible(false);
         setIsChartVisible(false);
       }
-      return newFiles;
+      return newTracks;
     });
   };
 
@@ -56,17 +56,38 @@ export function useGpxFiles(
           console.error("Could not parse file");
           continue;
         }
-        const fileGpx: FileGpx = {
-          fileParsed: fileParsed,
-          key: generateUniqueKey(),
-        };
-        addFileGpxParsed(fileGpx);
-        const fileData = extractFileParsedData(fileGpx.fileParsed, fileGpx.key);
 
-        if (fileCardListRef.current) {
-          fileCardListRef.current.addFileCardData(fileData);
+        // Add all tracks
+        for (let j = 0; j < fileParsed.tracks.length; j++) {
+          const trackGpx: TrackGpx = {
+            key: generateUniqueKey(),
+            fileParsed,
+            type: "track",
+            index: j,
+          };
+          addTrackGpx(trackGpx);
+          const trackData = extractTrackParsedData(trackGpx);
+          if (fileCardListRef.current) {
+            fileCardListRef.current.addFileCardData(trackData);
+          }
+          newlyAdded = true;
         }
-        newlyAdded = true;
+
+        // Add all routes
+        for (let k = 0; k < fileParsed.routes.length; k++) {
+          const routeGpx: TrackGpx = {
+            key: generateUniqueKey(),
+            fileParsed,
+            type: "route",
+            index: k,
+          };
+          addTrackGpx(routeGpx);
+          const routeData = extractTrackParsedData(routeGpx);
+          if (fileCardListRef.current) {
+            fileCardListRef.current.addFileCardData(routeData);
+          }
+          newlyAdded = true;
+        }
       } catch (err) {
         console.error("Error processing file:", err);
       }
@@ -77,25 +98,23 @@ export function useGpxFiles(
     }
   };
 
-  const updateDataInChart = useCallback((files: FileGpx[]) => {
-    if (files.length === 0) return;
-    const { elevPoints, distPoints } = getDataPointsAxis(
-      files.map((file) => file.fileParsed),
-    );
+  const updateDataInChart = useCallback((tracks: TrackGpx[]) => {
+    if (tracks.length === 0) return;
+    const { elevPoints, distPoints } = getDataPointsAxis(tracks);
     setElevationPoints(elevPoints);
     setDistancePoints(distPoints);
   }, []);
 
   const handleButtonPlotElevationClick = () => {
-    if (!filesGpxParsed || filesGpxParsed.length === 0) {
+    if (!tracksGpx || tracksGpx.length === 0) {
       return;
     }
-    updateDataInChart(filesGpxParsed);
+    updateDataInChart(tracksGpx);
     setIsChartVisible(true);
   };
 
   const handleOrderChange = (newOrder: GpxSummaryData[]) => {
-    if (newOrder.length !== filesGpxParsed.length) {
+    if (newOrder.length !== tracksGpx.length) {
       console.error("Arrays must have the same length.");
       return;
     }
@@ -106,25 +125,25 @@ export function useGpxFiles(
       orderMap.set(newOrder[i][key], i);
     }
 
-    const reorderedFilesGpxParsed = new Array(filesGpxParsed.length);
-    for (let i = 0; i < filesGpxParsed.length; i++) {
-      const index = orderMap.get(filesGpxParsed[i][key]);
+    const reorderedTracks = new Array(tracksGpx.length);
+    for (let i = 0; i < tracksGpx.length; i++) {
+      const index = orderMap.get(tracksGpx[i][key]);
       if (index === undefined) {
         throw new Error(
-          `Key '${filesGpxParsed[i][key]}' not found in the first array.`,
+          `Key '${tracksGpx[i][key]}' not found in the first array.`,
         );
       }
-      reorderedFilesGpxParsed[index] = filesGpxParsed[i];
+      reorderedTracks[index] = tracksGpx[i];
     }
 
-    setFilesGpxParsed(reorderedFilesGpxParsed);
+    setTracksGpx(reorderedTracks);
     if (isChartVisible) {
-      updateDataInChart(reorderedFilesGpxParsed);
+      updateDataInChart(reorderedTracks);
     }
   };
 
   return {
-    filesGpxParsed,
+    filesGpxParsed: tracksGpx, // Exported as filesGpxParsed to avoid changing the page component
     elevationPoints,
     distancePoints,
     isChartVisible,

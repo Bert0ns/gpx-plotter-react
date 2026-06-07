@@ -5,7 +5,6 @@ import { RefObject, useRef } from "react";
 import { Button } from "@/app/components/ui/button";
 import LineChart from "@/app/components/atoms/LineChart";
 import VisibleDiv from "@/app/components/atoms/VisibleDiv";
-import { TypedChartComponent } from "@/node_modules/react-chartjs-2/dist/types";
 import FileCardList from "@/app/components/FileCardList";
 import { FileCardListRef } from "@/app/components/FileCardList/index.types";
 import { HowItWorks } from "@/app/components/atoms/HowItWorks";
@@ -15,7 +14,8 @@ import { useChartConfig } from "@/app/hooks/useChartConfig";
 
 export default function PlotPage() {
   const fileCardListRef = useRef<FileCardListRef>(null);
-  const chartRef = useRef<TypedChartComponent<"line">>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const chartRef = useRef<any>(null);
 
   const {
     elevationPoints,
@@ -31,12 +31,12 @@ export default function PlotPage() {
   const { config, actions } = useChartConfig();
 
   function downloadChartImage(
-    chartRef: RefObject<TypedChartComponent<"line"> | null>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    chartRef: RefObject<any>,
   ): void {
     if (chartRef.current) {
       const link = document.createElement("a");
       link.download = "chart.png";
-      // @ts-expect-error exists
       link.href = chartRef.current.toBase64Image();
       link.click();
       link.remove();

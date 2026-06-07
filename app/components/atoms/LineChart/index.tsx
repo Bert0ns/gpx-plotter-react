@@ -2,9 +2,11 @@ import LineChartProps from "@/app/components/atoms/LineChart/index.types";
 import React from "react";
 import { Line } from "react-chartjs-2";
 import { Chart } from "chart.js/auto";
-import { CategoryScale, ChartOptions } from "chart.js";
+import { Plugin, CategoryScale, ChartOptions } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 Chart.register(CategoryScale, ChartDataLabels);
+
+const EPSILON = 0.05; // Tolerance for floating point comparison
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LineChart = React.forwardRef<any, LineChartProps>(
@@ -45,126 +47,89 @@ const LineChart = React.forwardRef<any, LineChartProps>(
         },
       ],
     };
-    const canvasBackgroundColorPlugin = {
+
+    const canvasBackgroundColorPlugin: Plugin<"line"> = {
       id: "canvasBackgroundColor",
-      beforeDraw: (chart: never, args: never, options: never) => {
+      beforeDraw: (chart, args, options) => {
         const { ctx } = chart;
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         ctx.save();
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         ctx.globalCompositeOperation = "destination-over";
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        ctx.fillStyle = options.color || "#ffffff";
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ctx.fillStyle = (options as any).color || "#ffffff";
         ctx.fillRect(0, 0, chart.width, chart.height);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         ctx.restore();
       },
     };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const findLabelForContext = (context: any) => {
+      if (!dataLabels) return undefined;
+      const xVal = Number(context.chart.data.labels?.[context.dataIndex]);
+      return dataLabels.find((label) => Math.abs(xVal - label.x) < EPSILON);
+    };
+
     const chartOptions: ChartOptions<"line"> = {
       responsive: isResponsive !== undefined ? isResponsive : false,
       maintainAspectRatio: false,
-      normalized: true, //parsing: false,
+      normalized: true,
       animation: animationsEnabled === false ? false : undefined,
       scales: {
         x: {
           display: displayAxis !== undefined ? displayAxis : true,
-          ticks: {
-            maxTicksLimit: 10,
-          },
+          ticks: { maxTicksLimit: 10 },
         },
         y: {
           display: displayAxis !== undefined ? displayAxis : true,
-          ticks: {
-            maxTicksLimit: 12,
-          },
+          ticks: { maxTicksLimit: 12 },
         },
       },
-      layout: {
-        padding: 4,
-      },
+      layout: { padding: 4 },
       plugins: {
         legend: {
           display: displayLegend !== undefined ? displayLegend : true,
         },
         title: {
           display: !!chartTitle,
-          text: chartTitle ? chartTitle : "",
-          color: colorChartTitle ? colorChartTitle : "#000000",
+          text: chartTitle || "",
+          color: colorChartTitle || "#000000",
           font: {
             weight: "bold",
             family: "Roboto, sans-serif",
-            size: chartTitleFontSize ? chartTitleFontSize : 20,
+            size: chartTitleFontSize || 20,
           },
         },
         // @ts-expect-error custom plugin property
         canvasBackgroundColor: {
-          color: chartBackgroundColor ? chartBackgroundColor : "#ffffff",
+          color: chartBackgroundColor || "#ffffff",
         },
         datalabels: {
-          //textAlign: 'center',
-          align: "top" as const,
-          anchor: "end" as const,
-          //padding: 0,
-
-          //clamp: true,
-          //clip: true,
-          font: function (context) {
+          align: "top",
+          anchor: "end",
+          font: (context) => {
             const font = {
               weight: "bold" as const,
               family: "Roboto, sans-serif",
               size: 10,
             };
-            if (dataLabels === undefined) {
-              return font;
-            }
-            const label = dataLabels.find(
-              (label) =>
-                context.chart.data.labels?.[context.dataIndex] === label.x,
-            );
-            if (label === undefined) {
-              return font;
-            }
-            font.size = label.fontSize;
+            const label = findLabelForContext(context);
+            if (label) font.size = label.fontSize;
             return font;
           },
-          color: function (context) {
-            if (dataLabels === undefined) {
-              return defaultLabelTextColor;
-            }
-            const label = dataLabels.find(
-              (label) =>
-                label.x === context.chart.data.labels?.[context.dataIndex],
-            );
+          color: (context) => {
+            const label = findLabelForContext(context);
             return label ? label.fontColor : defaultLabelTextColor;
           },
           display: (context) => {
-            if (dataLabels === undefined) {
-              return false;
-            }
-            return dataLabels.some(
-              (label) =>
-                label.x === context.chart.data.labels?.[context.dataIndex],
-            );
+            return !!findLabelForContext(context);
           },
-          formatter: (value: unknown, context) => {
-            if (dataLabels === undefined) {
-              return "";
-            }
-            const label = dataLabels.find(
-              (label) =>
-                label.x === context.chart.data.labels?.[context.dataIndex],
-            );
+          formatter: (value, context) => {
+            const label = findLabelForContext(context);
             return label ? label.label : "";
           },
         },
       },
     };
+
     const chartPlugins = [canvasBackgroundColorPlugin];
 
     return (
@@ -176,23 +141,10 @@ const LineChart = React.forwardRef<any, LineChartProps>(
           plugins={chartPlugins}
           className="w-[1000px] h-[700px]"
         />
-        {/* To block the auto resizing of the chart
-            <div className="relative w-full overflow-x-auto">
-            <div className="min-w-[1000px]">
-            <Line
-                ref={ref}
-                data={chartData}
-                options={chartOptions}
-                plugins={chartPlugins}
-                className="w-[1000px] h-[700px]"
-            />
-            </div>
-            </div>
-
-            */}
       </div>
     );
   },
 );
+
 LineChart.displayName = "LineChart";
 export default LineChart;

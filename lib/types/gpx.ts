@@ -15,7 +15,9 @@ export interface GpxSummaryData {
   negElevationDiff: number;
 }
 
-export type FileGpx = {
+export type TrackGpx = {
   key: number;
   fileParsed: GpxParser;
+  type: "track" | "route";
+  index: number;
 };
