@@ -5,11 +5,7 @@
   "directories": {
     "output": "dist"
   },
-  "files": [
-    "./out/**/*",
-    "./out/*",
-    "./main.js"
-  ],
+  "files": ["./out/**/*", "./out/*", "./main.js"],
   "win": {
     "target": "nsis"
   },

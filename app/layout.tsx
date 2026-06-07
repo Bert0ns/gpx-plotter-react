@@ -1,9 +1,9 @@
-import type {Metadata} from "next";
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/app/components/Footer";
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/app/components/Header";
 
 const geistSans = Geist({
@@ -28,12 +28,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <Header/>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <Header />
         {children}
-      <Footer/>
-      <Analytics/>
-      <SpeedInsights/>
+        <Footer />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -13,7 +13,8 @@
     "lint": "next lint",
     "electron-dev": "electron .",
     "electron-build": "electron-builder",
-    "prepare": "husky"
+    "prepare": "husky",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",
