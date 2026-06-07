@@ -2,12 +2,12 @@ import LineChartProps from "@/app/components/atoms/LineChart/index.types";
 import React from "react";
 import { Line } from "react-chartjs-2";
 import { Chart } from "chart.js/auto";
-import { CategoryScale } from "chart.js";
+import { CategoryScale, ChartOptions } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { TypedChartComponent } from "@/node_modules/react-chartjs-2/dist/types";
 Chart.register(CategoryScale, ChartDataLabels);
 
-const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const LineChart = React.forwardRef<any, LineChartProps>(
   (
     {
       chartXDataLabels,
@@ -66,11 +66,11 @@ const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(
         ctx.restore();
       },
     };
-    const chartOptions = {
+    const chartOptions: ChartOptions<"line"> = {
       responsive: isResponsive !== undefined ? isResponsive : false,
       maintainAspectRatio: false,
       normalized: true, //parsing: false,
-      animation: animationsEnabled !== undefined ? animationsEnabled : true,
+      animation: animationsEnabled === false ? false : undefined,
       scales: {
         x: {
           display: displayAxis !== undefined ? displayAxis : true,
@@ -102,6 +102,7 @@ const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(
             size: chartTitleFontSize ? chartTitleFontSize : 20,
           },
         },
+        // @ts-expect-error custom plugin property
         canvasBackgroundColor: {
           color: chartBackgroundColor ? chartBackgroundColor : "#ffffff",
         },
@@ -113,10 +114,9 @@ const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(
 
           //clamp: true,
           //clip: true,
-          // @ts-expect-error context
           font: function (context) {
             const font = {
-              weight: "bold",
+              weight: "bold" as const,
               family: "Roboto, sans-serif",
               size: 10,
             };
@@ -125,7 +125,7 @@ const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(
             }
             const label = dataLabels.find(
               (label) =>
-                context.chart.data.labels[context.dataIndex] === label.x,
+                context.chart.data.labels?.[context.dataIndex] === label.x,
             );
             if (label === undefined) {
               return font;
@@ -133,35 +133,32 @@ const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(
             font.size = label.fontSize;
             return font;
           },
-          // @ts-expect-error context
           color: function (context) {
             if (dataLabels === undefined) {
               return defaultLabelTextColor;
             }
             const label = dataLabels.find(
               (label) =>
-                label.x === context.chart.data.labels[context.dataIndex],
+                label.x === context.chart.data.labels?.[context.dataIndex],
             );
             return label ? label.fontColor : defaultLabelTextColor;
           },
-          // @ts-expect-error context
           display: (context) => {
             if (dataLabels === undefined) {
               return false;
             }
             return dataLabels.some(
               (label) =>
-                label.x === context.chart.data.labels[context.dataIndex],
+                label.x === context.chart.data.labels?.[context.dataIndex],
             );
           },
-          // @ts-expect-error context
-          formatter: (value: never, context) => {
+          formatter: (value: unknown, context) => {
             if (dataLabels === undefined) {
               return "";
             }
             const label = dataLabels.find(
               (label) =>
-                label.x === context.chart.data.labels[context.dataIndex],
+                label.x === context.chart.data.labels?.[context.dataIndex],
             );
             return label ? label.label : "";
           },
@@ -172,7 +169,6 @@ const LineChart = React.forwardRef<TypedChartComponent<"line">, LineChartProps>(
 
     return (
       <div {...props}>
-        {/* @ts-expect-error font is not recognized as a valid type -> but it is*/}
         <Line
           ref={ref}
           data={chartData}
