@@ -21,6 +21,7 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    autoHideMenuBar: true,
     webPreferences: {
       //preload: 'preload.js', // If you need a preload script
       nodeIntegration: false, // Important for security
