@@ -53,7 +53,7 @@
     "electron": "^42.3.3",
     "electron-builder": "^26.15.0",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^15.1.6",
+    "eslint-config-next": "^16.2.7",
     "fallow": "^2.89.0",
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
