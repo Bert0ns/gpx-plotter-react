@@ -5,14 +5,16 @@
   "directories": {
     "output": "dist"
   },
-  "files": ["./out/**/*", "./out/*", "./main.js"],
+  "files": ["out/**/*", "main.js", "package.json"],
   "win": {
-    "target": "nsis"
+    "target": ["nsis", "zip"]
   },
   "mac": {
-    "target": "dmg"
+    "target": ["dmg", "zip"]
   },
   "linux": {
-    "target": "deb"
+    "target": ["AppImage", "deb"],
+    "category": "Utility",
+    "syncDesktopName": true
   }
 }

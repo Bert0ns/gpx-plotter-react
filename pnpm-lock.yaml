@@ -32,7 +32,7 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      electron-is-dev:
+      electron-serve:
         specifier: ^3.0.1
         version: 3.0.1
       gpxparser:
@@ -1887,12 +1887,12 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  electron-is-dev@3.0.1:
-    resolution: {integrity: sha512-8TjjAh8Ec51hUi3o4TaU0mD3GMTOESi866oRNavj9A3IQJ7pmv+MJVmdZBFGw4GFT36X7bkqnuDNYvkQgvyI8Q==}
-    engines: {node: '>=18'}
-
   electron-publish@26.15.0:
     resolution: {integrity: sha512-pt6K3ol/a+o3HbqmYkL2NYlVH5pd34tL4FPRcgX8E88xQAqQyIsseXe4vWy7Pq2BaYy+iFGJrtInZe11FFAQwQ==}
+
+  electron-serve@3.0.1:
+    resolution: {integrity: sha512-o40R/CfuxT4ccpD3kK2enFghd2jgXSgI02l4p51f8f2clXC4GPKpi0JQUn1FSRGrIHWH8fjdPlRsznEyItDPLg==}
+    engines: {node: '>=20'}
 
   electron-winstaller@5.4.0:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
@@ -6037,8 +6037,6 @@ snapshots:
       - electron-builder-squirrel-windows
       - supports-color
 
-  electron-is-dev@3.0.1: {}
-
   electron-publish@26.15.0:
     dependencies:
       '@types/fs-extra': 9.0.13
@@ -6052,6 +6050,8 @@ snapshots:
       mime: 2.6.0
     transitivePeerDependencies:
       - supports-color
+
+  electron-serve@3.0.1: {}
 
   electron-winstaller@5.4.0:
     dependencies:
