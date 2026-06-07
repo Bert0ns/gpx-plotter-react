@@ -32,7 +32,7 @@
     "gpxparser": "^3.0.8",
     "lucide-react": "^0.474.0",
     "next": "^16.2.7",
-    "react": "^18.3.1",
+    "react": "^19.2.7",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^2.6.1"
