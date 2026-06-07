@@ -29,3 +29,19 @@ Deployed here: [https://gpx-plotter-react.vercel.app/](https://gpx-plotter-react
 About GPX schema: [https://www.topografix.com/gpx.asp](https://www.topografix.com/gpx.asp)
 
 More on [Wikipedia](https://en.wikipedia.org/wiki/GPS_Exchange_Format)
+
+## Releasing a New Version
+
+We use GitHub Actions and `electron-builder` to automatically build, package, and publish the desktop application for macOS, Linux, and Windows.
+
+To release a new version:
+
+1. Update the version number in `package.json` (e.g., `"version": "1.0.1"`).
+2. Commit your changes.
+3. Create and push a git tag starting with `v` that matches your version:
+   ```bash
+   git tag v1.0.1
+   git push origin v1.0.1
+   ```
+
+GitHub Actions will automatically trigger, build the binaries on native operating systems, and publish them as a new [GitHub Release](https://github.com/Bert0ns/gpx-plotter-react/releases)!
