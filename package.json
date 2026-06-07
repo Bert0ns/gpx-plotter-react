@@ -2,7 +2,7 @@
   "author": "Bert0ns <bert0ns@example.com>",
   "desktopName": "GpxPlotter",
   "name": "gpx-plotter",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "private": true,
   "main": "main.js",
   "description": "gpx parser and plotter",
