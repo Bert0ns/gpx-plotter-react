@@ -10,7 +10,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "electron-dev": "electron .",
     "electron-build": "electron-builder",
     "prepare": "husky",
