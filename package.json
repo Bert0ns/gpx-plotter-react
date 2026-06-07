@@ -12,7 +12,8 @@
     "start": "next start",
     "lint": "next lint",
     "electron-dev": "electron .",
-    "electron-build": "electron-builder"
+    "electron-build": "electron-builder",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",
@@ -42,11 +43,24 @@
     "electron-builder": "^26.8.1",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
     "postcss": "^8.5.10",
+    "prettier": "^3.8.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },
   "overrides": {
     "postcss": "^8.5.10"
-  }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  },
+  "packageManager": "pnpm@11.5.2"
 }
