@@ -89,22 +89,22 @@ export function extractFileParsedData(
   };
 }
 
-export function getElevationTrackPoints(gpx: GpxParser): number[] {
+function getElevationTrackPoints(gpx: GpxParser): number[] {
   const points = gpx.tracks[0].points;
   return points.map((p) => p.ele);
 }
 
-export function getElevationRoutePoints(gpx: GpxParser): number[] {
+function getElevationRoutePoints(gpx: GpxParser): number[] {
   const points = gpx.routes[0].points;
   return points.map((p) => p.ele);
 }
 
-export function getDistanceTrackPoints(gpx: GpxParser): number[] {
+function getDistanceTrackPoints(gpx: GpxParser): number[] {
   // @ts-expect-error library type error
   return gpx.tracks[0].distance.cumul;
 }
 
-export function getDistanceRoutePoints(gpx: GpxParser): number[] {
+function getDistanceRoutePoints(gpx: GpxParser): number[] {
   // @ts-expect-error library type error
   return gpx.routes[0].distance.cumul;
 }
