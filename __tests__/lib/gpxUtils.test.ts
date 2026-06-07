@@ -74,13 +74,12 @@ describe("gpxUtils", () => {
   </trk>
 </gpx>`;
     const fileParsed = parseGPX(validGPX)!;
-    // @ts-expect-error forcing invalid type
-    const trackGpx: TrackGpx = {
+    const trackGpx = {
       fileParsed,
       type: "invalid",
       index: 0,
       key: 1,
-    };
+    } as unknown as TrackGpx;
     const data = extractTrackParsedData(trackGpx);
     expect(data.filename).toBe("");
     expect(data.totalDistance).toBe(0);
